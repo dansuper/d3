@@ -18,6 +18,9 @@ var data = [
 
 ];
 
+var cargosPosition = _.reduce(_.map(_.groupBy(data, function(d){return d.cargo}), function(value, key){ return key;}), function(memo, value, index){ memo[value] = index; return memo;}, {});
+var personasPosition = _.reduce(_.map(_.groupBy(data, function(d){return d.nombre}), function(value, key){ return key}).sort(), function(memo, value, index){ memo[value] = index; return memo; }, {});
+
 var width = 900;
 var height = 400;
 
@@ -45,24 +48,29 @@ var groups = svg.selectAll('g')
       .attr('style', "stroke:black;stroke-width:1;fill:white")
 
     g.append('text')
-      .attr('y', 30)
+      .attr('y', 12)
       .text(function(d){ return d.cargo; })
+
+    g.append('text')
+      .attr('y', 32)
+      .text(function(d){ return d.nombre; })
 
   });
 
-
 d3.select('#btn1').on('click', function(){
+  //x:fn(persona)
   groups.transition().attr('transform', function(d){ 
-    var x = (parseInt(d.inicio) - 70) * 40 + 100;
-    var y = (parseInt(d.id) - 1) * 50;
+    var x = (parseInt(d.inicio) - 70) * 40;
+    var y =  personasPosition[d.nombre] * 50;
     return 'translate(' + x + ',' + y + ')'; 
   });
 });
 
 d3.select('#btn2').on('click', function(){
+  //x:fn(cargo)
   groups.transition().attr('transform', function(d){ 
     var x = (parseInt(d.inicio) - 70) * 40;
-    var y = (parseInt(d.id) - 1) * 50;
+    var y =  cargosPosition[d.cargo] * 50;
     return 'translate(' + x + ',' + y + ')'; 
   });
 });
