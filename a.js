@@ -24,24 +24,48 @@ var height = 400;
 var svg = d3.select('svg').attr("width", width)
   .attr("height", height);
 
-svg.selectAll('rect')
+var groups = svg.selectAll('g')
   .data(data)
-    .enter()
-    .append('rect')
-      .attr('x', function(d){ return (parseInt(d.inicio) - 70) * 40; })
-      .attr('y', function(d){ return (parseInt(d.id) - 1) * 50; })
+  .enter()
+  .append('g')
+
+  .attr('transform', function(d){ 
+    var x = (parseInt(d.inicio) - 70) * 40;
+    var y = (parseInt(d.id) - 1) * 50;
+    return 'translate(' + x + ',' + y + ')'; 
+  })
+
+  .each(function(d){
+
+    var g = d3.select(this);
+    
+    g.append('rect')
       .attr('width', 70)
       .attr('height', 40)
       .attr('style', "stroke:black;stroke-width:1;fill:white")
 
-      ;
-
-svg.selectAll('text')
-  .data(data)
-    .enter()
-    .append('text')
-      .attr('x', function(d){ return (parseInt(d.inicio) - 70) * 40; })
-      .attr('y', function(d){ return (parseInt(d.id) ) * 50 - 20; })
+    g.append('text')
+      .attr('y', 30)
       .text(function(d){ return d.cargo; })
-      ;
+
+  });
+
+
+d3.select('#btn1').on('click', function(){
+  groups.transition().attr('transform', function(d){ 
+    var x = (parseInt(d.inicio) - 70) * 40 + 100;
+    var y = (parseInt(d.id) - 1) * 50;
+    return 'translate(' + x + ',' + y + ')'; 
+  });
+});
+
+d3.select('#btn2').on('click', function(){
+  groups.transition().attr('transform', function(d){ 
+    var x = (parseInt(d.inicio) - 70) * 40;
+    var y = (parseInt(d.id) - 1) * 50;
+    return 'translate(' + x + ',' + y + ')'; 
+  });
+});
+
+
 
