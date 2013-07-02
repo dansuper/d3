@@ -2,18 +2,27 @@ function getAlturasPorCargo(data){
 	var cargosProcesados = ordenamientoPorCargo(data);
 
 	var alturasPorCargo = {};
+	var eje = [];
 	var alturaBase = 0;
 
-	_.each(cargosProcesados, function(cargonominal){
+	_.each(cargosProcesados, function(cargonominal, nombreCargoNominal){
 
 		_.each(cargonominal.cargos, function(cargo){
 			alturasPorCargo[cargo.rowNumber] = cargo.altura + alturaBase;
+		});
+		
+		eje.push({
+			cargonominal: nombreCargoNominal, 
+			altura: alturaBase
 		});
 
 		alturaBase += cargonominal.altura + 1;
 	});
 
-	return alturasPorCargo;
+	return {
+		alturasPorCargo: alturasPorCargo, 
+		eje: eje
+	} ;
 
 }
 
@@ -21,7 +30,6 @@ function ordenamientoPorCargo(data){
 	
 	var input = data.slice();
 	var returnData = {};
-	input = convertirAñosAEnteros(input);
 
 	var agrupadoPorCargo = _.groupBy(input, function(cargo){ return cargo.cargonominal; });
 
@@ -73,9 +81,7 @@ function ordenarPorCargoYNombre(data){
 	});
 }
 
-function strCmp(string1, string2){
-	var s1 = string1.toLowerCase();
-	var s2 = string2.toLowerCase();
+function strCmp(s1, s2){
 	if(s1 == s2){
 		return 0;
 	}else{
@@ -90,14 +96,5 @@ function strCmp(string1, string2){
 function ordenarPorNombreyFechaInicioYear(cargos){
 	cargos.sort(function(a,b){ 
 		return strCmp(a.nombre, b.nombre) || (a.fechainicioyear - b.fechainicioyear);
-	});
-}
-
-function convertirAñosAEnteros(cargos){
-	var thisYear = (new Date()).getFullYear();
-	return _.map(cargos, function(cargo){ 
-		cargo.fechainicioyear = parseInt(cargo.fechainicioyear);
-		cargo.fechafinyear = parseInt(cargo.fechafinyear) || thisYear;
-		return cargo; 
 	});
 }
