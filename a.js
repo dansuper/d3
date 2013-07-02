@@ -15,8 +15,12 @@ var PIXELS_PER_YEAR = 20;
 var OFFSET_Y = 30;
 var PIXELS_H_OFFSET = 50;
 
-var svg = d3.select('svg').attr("width", width)
+var svg = d3.select('svg')
+  .attr("width", width)
   .attr("height", height);
+
+var ejeCargos = svg.select('#ejeCargos'); 
+var ejePersonas = svg.select('#ejePersonas');
 
 var groups = svg.select('#cargos').selectAll('g')
   .data(data)
@@ -41,45 +45,6 @@ var groups = svg.select('#cargos').selectAll('g')
       .attr('font-size', 10)
       .text(function(d){ return d.nombre; })
 
-  });
-
-var ejeCargos = svg.select('#ejeCargos'); 
-
-ejeCargos.selectAll('g').data(cargosInfo.eje).enter().append('g')
-  .each(function(d){
-    
-    var g = d3.select(this);
-
-    g.append('text')
-        .attr('font-size', 10)
-        .attr('y',16)
-        .text(function(d){ return d.cargonominal; })
-
-  })
-  .attr('transform', function(d){ 
-    var x = 0;
-    var y =  d.altura * OFFSET_Y;
-    return 'translate(' + x + ',' + y + ')'; 
-  });
-
-;
-
-var ejePersonas = svg.select('#ejePersonas');
-
-ejePersonas.selectAll('g').data(personasEjeInfo).enter().append('g')
-  .each(function(d, ix){
-
-    var g = d3.select(this);
-
-    g.append('text')
-        .attr('font-size', 10)
-        .attr('y',16)
-        .text(function(d){ return d; })
-  })
-  .attr('transform', function(d){ 
-    var x = 0;
-    var y =  personasPosition[d] * OFFSET_Y;
-    return 'translate(' + x + ',' + y + ')'; 
   });
 
 
@@ -117,6 +82,7 @@ function getDuracionCargo(d){
 
 function normalizarDatos(data){
   _.each(data,function(cargo){
+    cargo.territorio = cargo.territorio.trim().toLowerCase();
     cargo.nombre = cargo.nombre.trim().toLowerCase();
     cargo.cargonominal = cargo.cargonominal.trim().toLowerCase();
     cargo.fechainicioyear = parseInt(cargo.fechainicioyear);

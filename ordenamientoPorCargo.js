@@ -1,22 +1,24 @@
 function getAlturasPorCargo(data){
 	var cargosProcesados = ordenamientoPorCargo(data);
 
+	cargosProcesados.sort(function(a,b){ return strCmp(a.nombre, b.nombre);});
+
 	var alturasPorCargo = {};
 	var eje = [];
 	var alturaBase = 0;
 
-	_.each(cargosProcesados, function(cargonominal, nombreCargoNominal){
+	_.each(cargosProcesados, function(agrupado){
 
-		_.each(cargonominal.cargos, function(cargo){
+		_.each(agrupado.cargos, function(cargo){
 			alturasPorCargo[cargo.rowNumber] = cargo.altura + alturaBase;
 		});
 		
 		eje.push({
-			cargonominal: nombreCargoNominal, 
+			cargonominal: agrupado.nombre, 
 			altura: alturaBase
 		});
 
-		alturaBase += cargonominal.altura + 1;
+		alturaBase += agrupado.altura + 1;
 	});
 
 	return {
@@ -29,11 +31,11 @@ function getAlturasPorCargo(data){
 function ordenamientoPorCargo(data){
 	
 	var input = data.slice();
-	var returnData = {};
+	var returnData = [];
 
-	var agrupadoPorCargo = _.groupBy(input, function(cargo){ return cargo.cargonominal; });
+	var agrupado = _.groupBy(input, function(cargo){ return cargo.cargonominal +  ' | ' + cargo.territorio; });
 
-	_.each(agrupadoPorCargo, function(cargos, cargonominal){
+	_.each(agrupado, function(cargos, cargonominal){
 
 		var procesados = [];
 		var alturaMax = 0;
@@ -63,22 +65,15 @@ function ordenamientoPorCargo(data){
 
 		});
 		
-		returnData[cargonominal] = {
+		returnData.push({
+			nombre: cargonominal,
 			cargos : cargos, 
 			altura: alturaMax
-		};
+		});
 
 	});
 
 	return returnData;
-}
-
-function ordenarPorCargoYNombre(data){
-	data.sort(function(a,b){
-		return strCmp(a.cargonominal, b.cargonominal) 
-		|| strCmp(a.nombre, b.nombre) 
-		|| (a.fechainicioyear - b.fechainicioyear)
-	});
 }
 
 function strCmp(s1, s2){
@@ -95,6 +90,6 @@ function strCmp(s1, s2){
 
 function ordenarPorNombreyFechaInicioYear(cargos){
 	cargos.sort(function(a,b){ 
-		return strCmp(a.nombre, b.nombre) || (a.fechainicioyear - b.fechainicioyear);
+		return strCmp(a.nombre, b.nombre) ||  strCmp(a.territorio, b.territorio) || (a.fechainicioyear - b.fechainicioyear);
 	});
 }
