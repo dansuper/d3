@@ -6,6 +6,7 @@ var personasPosition = _.reduce(_.map(_.groupBy(data, function(d){return d.nombr
 var width = 2200;
 var height = 4800;
 
+var PIXELS_PER_YEAR = 20;
 var OFFSET_Y = 30;
 
 var cargosPosition2 = getAlturasPorCargo(data);
@@ -22,7 +23,7 @@ var groups = svg.selectAll('g')
     var g = d3.select(this);
     
     g.append('rect')
-      .attr('width', getDuracionCargo(d) * 10 )
+      .attr('width', getDuracionCargo(d) * PIXELS_PER_YEAR - 3 )
       .attr('height', 25)
       .attr('style', "stroke:black;stroke-width:1;fill:white")
 
@@ -41,7 +42,7 @@ var groups = svg.selectAll('g')
 function mostrarPorNombre(avoidTransition){
   var what = avoidTransition ? groups : groups.transition();
   what.attr('transform', function(d){ 
-    var x = (parseInt(d.fechainicioyear) - 1970) * 40;
+    var x = (parseInt(d.fechainicioyear) - 1970) * PIXELS_PER_YEAR;
     var y =  personasPosition[d.nombre] * OFFSET_Y;
     return 'translate(' + x + ',' + y + ')'; 
   });
@@ -49,7 +50,7 @@ function mostrarPorNombre(avoidTransition){
 
 function mostrarPorCargo(){
   groups.transition().attr('transform', function(d){ 
-    var x = (parseInt(d.fechainicioyear) - 1970) * 40;
+    var x = (parseInt(d.fechainicioyear) - 1970) * PIXELS_PER_YEAR;
     var y =  cargosPosition2[d.rowNumber] * OFFSET_Y;
     return 'translate(' + x + ',' + y + ')'; 
   });
