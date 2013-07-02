@@ -1348,7 +1348,10 @@ data = [{
     "nombre_2": "Cristina ",
     "partidonormalizado": "FPV",
     "rowNumber": 75
-}, {
+}
+
+
+, {
     "nombre": "Cristina Fernández",
     "cargotipo": "ejecutivo",
     "cargoclase": "electivo",
@@ -8062,5 +8065,7 @@ data = [{
     "nombre_2": "Horacio ",
     "partidonormalizado": "",
     "rowNumber": 448
-}]
+}
+
+]
 ;

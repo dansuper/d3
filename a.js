@@ -1,11 +1,14 @@
 
+var thisYear = (new Date()).getFullYear();
 var cargosPosition = _.reduce(_.map(_.groupBy(data, function(d){return d.cargonominal}), function(value, key){ return key;}), function(memo, value, index){ memo[value] = index; return memo;}, {});
 var personasPosition = _.reduce(_.map(_.groupBy(data, function(d){return d.nombre}), function(value, key){ return key}).sort(), function(memo, value, index){ memo[value] = index; return memo; }, {});
 
-var width = 1200;
-var height = 800;
+var width = 2200;
+var height = 4800;
 
 var OFFSET_Y = 30;
+
+var cargosPosition2 = getAlturasPorCargo(data);
 
 var svg = d3.select('svg').attr("width", width)
   .attr("height", height);
@@ -19,7 +22,7 @@ var groups = svg.selectAll('g')
     var g = d3.select(this);
     
     g.append('rect')
-      .attr('width', 70)
+      .attr('width', getDuracionCargo(d) * 10 )
       .attr('height', 25)
       .attr('style', "stroke:black;stroke-width:1;fill:white")
 
@@ -47,9 +50,13 @@ function mostrarPorNombre(avoidTransition){
 function mostrarPorCargo(){
   groups.transition().attr('transform', function(d){ 
     var x = (parseInt(d.fechainicioyear) - 1970) * 40;
-    var y =  cargosPosition[d.cargonominal] * OFFSET_Y;
+    var y =  cargosPosition2[d.rowNumber] * OFFSET_Y;
     return 'translate(' + x + ',' + y + ')'; 
   });
+}
+
+function getDuracionCargo(d){
+  return (parseInt(d.fechafinyear) || thisYear) - parseInt(d.fechainicioyear);
 }
 
 d3.select('#btn1').on('click', function(){
@@ -63,5 +70,3 @@ d3.select('#btn2').on('click', function(){
 mostrarPorNombre(true);
 
 //ok
-
-
