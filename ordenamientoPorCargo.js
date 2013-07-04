@@ -4,17 +4,31 @@ function getAlturasPorCargo(data){
 	cargosProcesados.sort(function(a,b){ return strCmp(a.nombre, b.nombre);});
 
 	var alturasPorCargo = {};
-	var eje = [];
+	var eje0 = [];
+	var eje1 = [];
 	var alturaBase = 0;
+	var prevCargo = null;
 
 	_.each(cargosProcesados, function(agrupado){
+		
+		var s = agrupado.nombre.split(' | ');
+		var cargonominal = s[0];
+		var territorio = s[1];
 
 		_.each(agrupado.cargos, function(cargo){
 			alturasPorCargo[cargo.rowNumber] = cargo.altura + alturaBase;
 		});
 		
-		eje.push({
-			cargonominal: agrupado.nombre, 
+		if(cargonominal !== prevCargo){
+			eje0.push({
+				label: cargonominal, 
+				altura: alturaBase
+			});
+			prevCargo = cargonominal;
+		}
+
+		eje1.push({
+			label: territorio, 
 			altura: alturaBase
 		});
 
@@ -23,7 +37,8 @@ function getAlturasPorCargo(data){
 
 	return {
 		alturasPorCargo: alturasPorCargo, 
-		eje: eje
+		eje0: eje0, 
+		eje1: eje1
 	} ;
 
 }

@@ -13,13 +13,15 @@ var height = 4800;
 
 var PIXELS_PER_YEAR = 20;
 var OFFSET_Y = 30;
-var PIXELS_H_OFFSET = 50;
+var PIXELS_H_OFFSET = 200;
 
 var svg = d3.select('svg')
   .attr("width", width)
   .attr("height", height);
 
-var ejeCargos = svg.select('#ejeCargos'); 
+var ejeCargos0 = svg.select('#ejeCargos0'); 
+var ejeCargos1 = svg.select('#ejeCargos1'); 
+
 var ejePersonas = svg.select('#ejePersonas');
 
 var groups = svg.select('#cargos').selectAll('g')
@@ -51,7 +53,8 @@ var groups = svg.select('#cargos').selectAll('g')
 function mostrarPorNombre(avoidTransition){
   
   ejePersonas.transition().attr('fill-opacity', 1);
-  ejeCargos.transition().attr('fill-opacity', 0);
+  ejeCargos0.transition().attr('fill-opacity', 0);
+  ejeCargos1.transition().attr('fill-opacity', 0);
 
   var what = avoidTransition ? groups : groups.transition();
   what.attr('transform', function(d){ 
@@ -64,7 +67,8 @@ function mostrarPorNombre(avoidTransition){
 function mostrarPorCargo(){
 
   ejePersonas.transition().attr('fill-opacity', 0)
-  ejeCargos.transition().attr('fill-opacity', 1);
+  ejeCargos0.transition().attr('fill-opacity', 1);
+  ejeCargos1.transition().attr('fill-opacity', 1);
   
   var alturasPorCargo = cargosInfo.alturasPorCargo;
 
