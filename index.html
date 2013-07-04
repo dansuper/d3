@@ -6,6 +6,10 @@
 		svg{
 			border: solid 1px red;
 		}
+		#tooltip{
+			position: absolute;
+			display: none;
+		}
 	</style>
 	<script src="d3.v3.js" ></script>
 	<script src="underscore-min.js" ></script>
@@ -22,9 +26,18 @@
 			<g id="ejePersonas"></g>
 			<g id="cargos"></g>
 		</svg>
+		<div id="tooltip"></div>
+		<script id="tooltipTemplate" type="text/template">
+			<b><%- nombre %></b><br>
+			<%- cargonominal %><br> 
+			<%- cargoext %> <br>
+			<span class="fecha"><%- fechainicioyear %> - <%- fechafinyear %><br>
+			<%- territorio %></span>
+		</script>
 	</div>
 	<script src="cargosData.js"></script>
 	<script src="ordenamientoPorCargo.js"></script>
+	<script src="tooltip.js"></script>
 	<script src="a.js"></script>
 	<script src="ejes.js"></script>
 </body>

@@ -47,7 +47,27 @@ var groups = svg.select('#cargos').selectAll('g')
       .attr('font-size', 10)
       .text(function(d){ return d.nombre; })
 
-  });
+  })
+  .on("mouseover", function(d){
+    showTooltip(d);
+    highlight(this);
+  })
+  .on("mouseout", function(d){
+    hideTooltip();
+    unhighlight(this);
+  })
+  .on("mousemove", function(d){
+    moveTooltip(d3.event);
+  })
+  
+  ;
+
+function highlight(el){ 
+  d3.select(el.childNodes[0]).transition().style('fill', 'rgb(255,0,0)');
+}
+function unhighlight(el){
+  d3.select(el.childNodes[0]).transition().style('fill', 'rgb(255,255,255)');
+}
 
 
 function mostrarPorNombre(avoidTransition){
