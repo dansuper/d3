@@ -1,4 +1,4 @@
-function getAlturasPorCargo(data){
+function getCargosEjeInfo(data){
 	var cargosProcesados = ordenamientoPorCargo(data);
 
 	cargosProcesados.sort(function(a,b){ return strCmp(a.nombre, b.nombre);});
