@@ -18,16 +18,20 @@ function inicializarCargosBloques(data){
     g.append('rect')
       .attr('width', getDuracionCargo(d) * PIXELS_PER_YEAR - 3 )
       .attr('height', 25)
-      .attr('style', "stroke:black;stroke-width:1;fill:white")
+      .attr('class', function(d){ return d.cargotipo; })
 
     g.append('text')
-      .attr('y', 12)
-      .attr('font-size', 10)
+      .attr('y', 10)
+      .attr('x', 2)
+      .attr('font-size', 8)
+      .attr('class', 'cargo')
       .text(function(d){ return d.cargonominal; })
 
     g.append('text')
-      .attr('y', 22)
-      .attr('font-size', 10)
+      .attr('y', 20)
+      .attr('x', 2)
+      .attr('font-size', 8)
+      .attr('class', 'nombre')
       .text(function(d){ return d.nombre; })
 
   })
@@ -53,10 +57,10 @@ function getDuracionCargo(d){
 }
 
 function highlight(el){ 
-  d3.select(el.childNodes[0]).transition().style('fill', 'rgb(255,0,0)');
+  d3.select(el.childNodes[0]).transition().style('opacity', '1');
 }
 
 function unhighlight(el){
-  d3.select(el.childNodes[0]).transition().style('fill', 'rgb(255,255,255)');
+  d3.select(el.childNodes[0]).transition().style('opacity', '0.5');
 }
 

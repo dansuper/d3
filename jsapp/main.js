@@ -1,7 +1,7 @@
 
 // "Constantes"
-var width = 2200;
-var height = 4800;
+var CHART_WIDTH = 2200;
+var CHART_HEIGHT = 4800;
 
 var PIXELS_PER_YEAR = 20;
 var OFFSET_Y = 30;
@@ -17,8 +17,8 @@ var cargosEjeInfo = getCargosEjeInfo(data);
 
 // Inicialización del svg
 var svg = d3.select('svg')
-  .attr("width", width)
-  .attr("height", height);
+  .attr("width", CHART_WIDTH)
+  .attr("height", CHART_HEIGHT);
 
 // Esto inicializa los rectángulos que representan a los cargos
 var groups = inicializarCargosBloques(data);

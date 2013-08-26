@@ -8,6 +8,7 @@ function getCargosEjeInfo(data){
 	var eje1 = [];
 	var alturaBase = 0;
 	var prevCargo = null;
+	var cantSubItems = 0;
 
 	_.each(cargosProcesados, function(agrupado){
 		
@@ -25,6 +26,7 @@ function getCargosEjeInfo(data){
 				altura: alturaBase
 			});
 			prevCargo = cargonominal;
+			cantSubItems = 0;
 		}
 
 		eje1.push({

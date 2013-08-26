@@ -12,9 +12,16 @@ function inicializarEjes(){
       var g = d3.select(this);
 
       g.append('text')
-          .attr('font-size', 10)
-          .attr('y',16)
+          .attr('y',18)
+          .attr('x',5)
           .text(function(d){ return d.label; })
+
+      g.append("line")
+          .attr("x1",0)
+          .attr("y1",-2)
+          .attr("x2",CHART_WIDTH)
+          .attr("y2",-2)
+          .attr("stroke","#CCC");
 
     })
     .attr('transform', function(d){ 
@@ -30,8 +37,7 @@ function inicializarEjes(){
       var g = d3.select(this);
 
       g.append('text')
-          .attr('font-size', 10)
-          .attr('y',16)
+          .attr('y',18)
           .text(function(d){ return d.label; })
 
     })
@@ -48,9 +54,17 @@ function inicializarEjes(){
       var g = d3.select(this);
 
       g.append('text')
-          .attr('font-size', 10)
-          .attr('y',16)
+          .attr('y',18)
+          .attr('x',5)
           .text(function(d){ return d.nombre; })
+
+      g.append("line")
+          .attr("x1",0)
+          .attr("y1",OFFSET_Y - 3)
+          .attr("x2",CHART_WIDTH)
+          .attr("y2",OFFSET_Y - 3)
+          .attr("stroke","#CCC");
+
     })
     .attr('transform', function(d){ 
       var x = 0;
@@ -72,13 +86,13 @@ function getPersonasEjeInfo(data){
 }
 
 function activarEjePersonas(){
-  ejePersonas.transition().attr('fill-opacity', 1);
-  ejeCargos0.transition().attr('fill-opacity', 0);
-  ejeCargos1.transition().attr('fill-opacity', 0);
+  ejePersonas.transition().attr('opacity', 1);
+  ejeCargos0.transition().attr('opacity', 0);
+  ejeCargos1.transition().attr('opacity', 0);
 }
 
 function activarEjeCargos(){
-  ejePersonas.transition().attr('fill-opacity', 0)
-  ejeCargos0.transition().attr('fill-opacity', 1);
-  ejeCargos1.transition().attr('fill-opacity', 1);
+  ejePersonas.transition().attr('opacity', 0)
+  ejeCargos0.transition().attr('opacity', 1);
+  ejeCargos1.transition().attr('opacity', 1);
 }

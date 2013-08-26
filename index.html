@@ -3,38 +3,84 @@
 	<meta charset='utf-8'> 
 	<title>d3</title>
 	<style>
+		.allContainer{
+			font-family: Tahoma, Geneva, sans-serif;
+			color: #555;
+		}
+		#ejeCargos0,
+		#ejeCargos1,
+		#ejePersonas{
+			font-size: 15px;
+		}
 		svg{
-			border: solid 1px red;
 		}
 		#tooltip{
 			position: absolute;
 			display: none;
+			text-align: center;
+			background: black;
+			opacity: 0.9;
+			border-radius: 4px;
+			padding: 5px;
+			font-size: 12px;
+		}
+		#tooltip.legislativo{
+			background: #AACAFF;
+		}
+		#tooltip.ejecutivo{
+			background: #FDACB8;
+		}
+		#tooltip .detalles{
+			font-size: 10px;
+		}
+		#cargos rect{
+			opacity: 0.5;
+		}
+		#cargos rect.legislativo{
+			fill: #00f;
+		}
+		#cargos rect.ejecutivo{
+			fill: #f00;
+		}
+		#cargos text{
+			fill: #FFF;
+		}
+		#cargos text.nombre{
+			font-weight: bold;
+		}
+		#cargos text.cargo{
 		}
 	</style>
 	<script src="jslib/d3.v3.js" ></script>
 	<script src="jslib/underscore-min.js" ></script>
 </head>
 <body>
-	<div>
-		<button id="btn1">por persona</button>
-		<button id="btn2">por cargo</button>
+
+	<div class="allContainer">
+		<div>
+			<button id="btn1">por persona</button>
+			<button id="btn2">por cargo</button>
+		</div>
+		<div>
+			<svg>
+				<g id="ejeCargos0"></g>
+				<g id="ejeCargos1"></g>
+				<g id="ejePersonas"></g>
+				<g id="cargos"></g>
+			</svg>
+			<div id="tooltip"></div>
+		</div>
 	</div>
-	<div>
-		<svg>
-			<g id="ejeCargos0"></g>
-			<g id="ejeCargos1"></g>
-			<g id="ejePersonas"></g>
-			<g id="cargos"></g>
-		</svg>
-		<div id="tooltip"></div>
-		<script id="tooltipTemplate" type="text/template">
-			<b><%- nombre %></b><br>
-			<%- cargonominal %><br> 
-			<%- cargoext %> <br>
-			<span class="fecha"><%- fechainicioyear %> - <%- fechafinyear %><br>
-			<%- territorio %></span>
-		</script>
-	</div>
+
+	<script id="tooltipTemplate" type="text/template">
+		<b><%- nombre %></b><br>
+		<%- cargonominal %><br> 
+		<span class="detalles">
+			<%- fechainicioyear %> - <%- fechafinyear %><br>
+			<%- territorio %>
+		</span>
+	</script>
+
 	<script src="jsapp/cargosData.js"></script>
 	<script src="jsapp/normalizar.js"></script>
 	<script src="jsapp/ordenamientoPorCargo.js"></script>
@@ -43,5 +89,6 @@
 	<script src="jsapp/ejes.js"></script>
 	<script src="jsapp/mostrarPor.js"></script>
 	<script src="jsapp/main.js"></script>
+
 </body>
 </html>

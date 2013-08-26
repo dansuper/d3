@@ -3,7 +3,7 @@ var tooltipTemplate = _.template(document.getElementById('tooltipTemplate').inne
 
 function showTooltip(d){
 	tooltipEl.html(tooltipTemplate(d));
-	tooltipEl.style('display', 'block');
+	tooltipEl.attr('class', d.cargotipo).style('display', 'block');
 }
 
 function hideTooltip(){
