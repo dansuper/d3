@@ -1,22 +1,27 @@
 function mostrarPorNombre(avoidTransition){
 
+  mostrandoPor = 'nombre';
+
   activarEjePersonas(); 
 
   var gru = avoidTransition ? groups : groups.transition();
   gru.attr('transform', function(d){ 
     var x = (parseInt(d.fechainicioyear) - 1970) * PIXELS_PER_YEAR + PIXELS_H_OFFSET;
-    var y =  personasEjeInfo.personasToAltura[d.nombre] * OFFSET_Y;
+    var y =  ejesInfo.personasEjeInfo.personasToAltura[d.nombre] * OFFSET_Y;
     return 'translate(' + x + ',' + y + ')'; 
   });
 }
 
-function mostrarPorCargo(){
+function mostrarPorCargo(avoidTransition){
+
+  mostrandoPor = 'cargo';
 
   activarEjeCargos();
 
-  var alturasPorCargo = cargosEjeInfo.alturasPorCargo;
+  var alturasPorCargo = ejesInfo.cargosEjeInfo.alturasPorCargo;
 
-  groups.transition().attr('transform', function(d){ 
+  var gru = avoidTransition ? groups : groups.transition();
+  gru.attr('transform', function(d){ 
     var x = (parseInt(d.fechainicioyear) - 1970) * PIXELS_PER_YEAR + PIXELS_H_OFFSET;
     var y = alturasPorCargo[d.rowNumber] * OFFSET_Y;
     return 'translate(' + x + ',' + y + ')'; 

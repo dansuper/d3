@@ -61,15 +61,10 @@
 			<button id="btn1">por persona</button>
 			<button id="btn2">por cargo</button>
 		</div>
-		<div>
-			<svg>
-				<g id="ejeCargos0"></g>
-				<g id="ejeCargos1"></g>
-				<g id="ejePersonas"></g>
-				<g id="cargos"></g>
-			</svg>
-			<div id="tooltip"></div>
+		<div id="filtroContainer">
+			<input type="text" id="filtro">
 		</div>
+		<div id="svgContainer"></div>
 	</div>
 
 	<script id="tooltipTemplate" type="text/template">
@@ -81,6 +76,16 @@
 		</span>
 	</script>
 
+	<script id="svgTemplate" type="text/template">
+		<svg>
+			<g id="ejeCargos0"></g>
+			<g id="ejeCargos1"></g>
+			<g id="ejePersonas"></g>
+			<g id="cargos"></g>
+		</svg>
+		<div id="tooltip"></div>
+	</script>
+
 	<script src="jsapp/cargosData.js"></script>
 	<script src="jsapp/normalizar.js"></script>
 	<script src="jsapp/ordenamientoPorCargo.js"></script>
@@ -88,6 +93,7 @@
 	<script src="jsapp/cargosBloques.js"></script>
 	<script src="jsapp/ejes.js"></script>
 	<script src="jsapp/mostrarPor.js"></script>
+	<script src="jsapp/filtro.js"></script>
 	<script src="jsapp/main.js"></script>
 
 </body>

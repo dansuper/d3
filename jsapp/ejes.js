@@ -4,9 +4,9 @@
  * que se muestran los datos ordenados según alguno de los 
  * criterios.
  */
-function inicializarEjes(){
+function inicializarEjes(ejes, ejesInfo){
 
-  ejeCargos0.selectAll('g').data(cargosEjeInfo.eje0).enter().append('g')
+  ejes.ejeCargos0.selectAll('g').data(ejesInfo.cargosEjeInfo.eje0).enter().append('g')
     .each(function(d){
       
       var g = d3.select(this);
@@ -31,7 +31,7 @@ function inicializarEjes(){
     })
   ;
 
-  ejeCargos1.selectAll('g').data(cargosEjeInfo.eje1).enter().append('g')
+  ejes.ejeCargos1.selectAll('g').data(ejesInfo.cargosEjeInfo.eje1).enter().append('g')
     .each(function(d){
       
       var g = d3.select(this);
@@ -48,7 +48,7 @@ function inicializarEjes(){
     })
   ;
 
-  ejePersonas.selectAll('g').data(personasEjeInfo.personasYAltura).enter().append('g')
+  ejes.ejePersonas.selectAll('g').data(ejesInfo.personasEjeInfo.personasYAltura).enter().append('g')
     .each(function(d, ix){
 
       var g = d3.select(this);
@@ -86,13 +86,13 @@ function getPersonasEjeInfo(data){
 }
 
 function activarEjePersonas(){
-  ejePersonas.transition().attr('opacity', 1);
-  ejeCargos0.transition().attr('opacity', 0);
-  ejeCargos1.transition().attr('opacity', 0);
+  ejes.ejePersonas.transition().attr('opacity', 1);
+  ejes.ejeCargos0.transition().attr('opacity', 0);
+  ejes.ejeCargos1.transition().attr('opacity', 0);
 }
 
 function activarEjeCargos(){
-  ejePersonas.transition().attr('opacity', 0)
-  ejeCargos0.transition().attr('opacity', 1);
-  ejeCargos1.transition().attr('opacity', 1);
+  ejes.ejePersonas.transition().attr('opacity', 0)
+  ejes.ejeCargos0.transition().attr('opacity', 1);
+  ejes.ejeCargos1.transition().attr('opacity', 1);
 }
