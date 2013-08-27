@@ -6,6 +6,7 @@
  */
 function inicializarEjes(ejes, ejesInfo){
 
+  /*
   ejes.ejeCargos0.selectAll('g').data(ejesInfo.cargosEjeInfo.eje0).enter().append('g')
     .each(function(d){
       
@@ -47,8 +48,11 @@ function inicializarEjes(ejes, ejesInfo){
       return 'translate(' + x + ',' + y + ')'; 
     })
   ;
+  */
 
-  ejes.ejePersonas.selectAll('g').data(ejesInfo.personasEjeInfo.personasYAltura).enter().append('g')
+  var dataEjePersonas = _.sortBy( _.map(_.groupBy(data, function(d){ return d.nombre}), function(v,k){ return {nombre: k};}) , 'nombre');
+
+  ejes.ejePersonas.selectAll('g').data(dataEjePersonas).enter().append('g')
     .each(function(d, ix){
 
       var g = d3.select(this);
@@ -66,24 +70,11 @@ function inicializarEjes(ejes, ejesInfo){
           .attr("stroke","#CCC");
 
     })
-    .attr('transform', function(d){ 
-      var x = 0;
-      var y =  d.altura * OFFSET_Y;
-      return 'translate(' + x + ',' + y + ')'; 
-    });
+ 
+    ;
 
 }
 
-function getPersonasEjeInfo(data){
-  var listaPersonas = _.map(_.groupBy(data, function(d){return d.nombre}), function(value, key){ return key}).sort();
-  var personasToAltura = _.reduce( listaPersonas , function(memo, value, index){ memo[value] = index; return memo; }, {});
-  var personasYAltura = _.map(listaPersonas, function(el, ix){ return {nombre: el, altura: ix} });
-  return {
-    listaPersonas: listaPersonas,
-    personasToAltura: personasToAltura, 
-    personasYAltura : personasYAltura
-  }
-}
 
 function activarEjePersonas(){
   ejes.ejePersonas.transition().attr('opacity', 1);
@@ -95,4 +86,19 @@ function activarEjeCargos(){
   ejes.ejePersonas.transition().attr('opacity', 0)
   ejes.ejeCargos0.transition().attr('opacity', 1);
   ejes.ejeCargos1.transition().attr('opacity', 1);
+}
+
+
+function updateEjePersonas(ejes, personasToAltura){
+  console.log(personasToAltura)
+  ejes.ejePersonas.selectAll('g')
+  .attr('transform', function(d){
+    var x = 0;
+    var y = personasToAltura[d.nombre] * OFFSET_Y || 0;
+    return 'translate(' + x + ',' + y + ')'; 
+  })
+  .attr('opacity', function(d){
+    return personasToAltura[d.nombre] !== undefined ? 1 : 0;
+  })
+  ;
 }

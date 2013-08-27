@@ -11,6 +11,7 @@ function inicializarCargosBloques(data){
   .data(data)
   .enter()
   .append('g')
+  .attr('opacity', 0)
   .each(function(d){
 
     var g = d3.select(this);

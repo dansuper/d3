@@ -13,65 +13,58 @@ var mostrandoPor = "nombre";
 
 normalizarDatos(data);
 
-function drawViz(data){
+resetSVGCanvas(); 
 
-	initSVG();
+// Esto inicializa los rectángulos que representan a los cargos
+groups = inicializarCargosBloques(data);
 
-	// Inicialización de los datos de los ejes
-	ejesInfo = {
-		personasEjeInfo: getPersonasEjeInfo(data),
-		cargosEjeInfo: getCargosEjeInfo(data)
-	};
+/*
+// Inicialización de los datos de los ejes
+ejesInfo = {
+	personasEjeInfo: getPersonasEjeInfo(data),
+	cargosEjeInfo: getCargosEjeInfo(data)
+};
 
-	//global ejes
-	ejes = { 
-		ejeCargos0: svg.select('#ejeCargos0'),
-		ejeCargos1: svg.select('#ejeCargos1'), 
-		ejePersonas: svg.select('#ejePersonas')
-	};
-	
-	inicializarEjes(ejes, ejesInfo);
+*/
 
-	// Esto inicializa los rectángulos que representan a los cargos
-	groups = inicializarCargosBloques(data);
+//global ejes
+ejes = { 
+	ejeCargos0: svg.select('#ejeCargos0'),
+	ejeCargos1: svg.select('#ejeCargos1'), 
+	ejePersonas: svg.select('#ejePersonas')
+};
 
-}
+inicializarEjes(ejes, data);
 
+tipoGrafico = "nombre"; // posibles valores: ['nombre', 'cargo']
 
-drawViz(data);
+filtro = {};
 
-mostrarPorNombre(true);
+layout(data, ejes, groups, tipoGrafico, filtro);
 
-setButtonsEventHandlers();
+//mostrarPorNombre();
 
+//setButtonsEventHandlers();
 
-var filtro = d3.select('#filtro');
-filtro.on('keyup', _.debounce(keyupHandler, 200));
+var filtroInput = d3.select('#filtro');
+filtroInput.on('keyup', _.debounce(keyupHandler, 200));
 
 function keyupHandler(){
 
-	var filteredData;
-	var filterValue = filtro[0][0].value.toLowerCase().trim();
+	filtro.nombre = filtroInput[0][0].value.toLowerCase().trim();
 
-	if(filterValue){
-		filteredData = _.filter(data, function(d){
-			return d.nombre.indexOf( filterValue ) > -1;
-		});
-	}else{
-		filteredData = data; // no need to copy
-	}
+	console.log(filtro)
 
-	drawViz(filteredData);
+	layout(data, ejes, groups, tipoGrafico, filtro);	
 
-
-	if(mostrandoPor=="nombre"){
-		mostrarPorNombre(true);
-	}else{
-		mostrarPorCargo(true);
-	}
+	// if(mostrandoPor=="nombre"){
+	// 	mostrarPorNombre(true);
+	// }else{
+	// 	mostrarPorCargo(true);
+	// }
 }
 
-function initSVG(){
+function resetSVGCanvas(){
 
 	document.getElementById('svgContainer').innerHTML = document.getElementById('svgTemplate').innerHTML;
 

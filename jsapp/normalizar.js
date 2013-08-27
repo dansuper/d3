@@ -12,6 +12,7 @@ function normalizarDatos(data){
     cargo.cargonominal = cargo.cargonominal.trim().toLowerCase();
     cargo.fechainicioyear = parseInt(cargo.fechainicioyear);
     cargo.fechafinyear = parseInt(cargo.fechafinyear) || thisYear;
+    cargo.__layout = {}; //Esto va a tener la info de layout
   });
 }
 
