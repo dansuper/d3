@@ -45,9 +45,7 @@ filtro = {
 
 layout(data, ejes, groups, tipoGrafico, filtro);
 
-//mostrarPorNombre();
-
-//setButtonsEventHandlers();
+setButtonsEventHandlers();
 
 var filtroInput = d3.select('#filtro');
 filtroInput.on('keyup', _.debounce(keyupHandler, 200));
@@ -55,16 +53,8 @@ filtroInput.on('keyup', _.debounce(keyupHandler, 200));
 function keyupHandler(){
 
 	filtro.nombre = filtroInput[0][0].value.toLowerCase().trim();
+	layout(data, ejes, groups, tipoGrafico, filtro);
 
-	console.log(filtro)
-
-	layout(data, ejes, groups, tipoGrafico, filtro);	
-
-	// if(mostrandoPor=="nombre"){
-	// 	mostrarPorNombre(true);
-	// }else{
-	// 	mostrarPorCargo(true);
-	// }
 }
 
 function resetSVGCanvas(){
@@ -77,3 +67,17 @@ function resetSVGCanvas(){
 	  .attr("height", CHART_HEIGHT);
 
 }
+
+function setButtonsEventHandlers(){
+  // Event handlers para los botones
+  d3.select('#btn1').on('click', function(){
+  	tipoGrafico = "nombre";
+    layout(data, ejes, groups, tipoGrafico, filtro);
+  });
+
+  d3.select('#btn2').on('click', function(){
+  	tipoGrafico = "cargo";
+    layout(data, ejes, groups, tipoGrafico, filtro);
+  });  
+}
+
