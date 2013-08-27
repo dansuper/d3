@@ -48,14 +48,11 @@ layout(data, ejes, groups, tipoGrafico, filtro);
 setButtonsEventHandlers();
 
 var filtroInput = d3.select('#filtro');
-filtroInput.on('keyup', _.debounce(keyupHandler, 200));
-
-function keyupHandler(){
-
+filtroInput.on('keyup', _.debounce(function (){
 	filtro.nombre = filtroInput[0][0].value.toLowerCase().trim();
 	layout(data, ejes, groups, tipoGrafico, filtro);
+}, 400));
 
-}
 
 function resetSVGCanvas(){
 

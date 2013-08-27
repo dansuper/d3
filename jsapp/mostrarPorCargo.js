@@ -1,9 +1,8 @@
-
 function mostrarPorCargo(data, ejes, groups, filtro){
 
   activarEjeCargos();
 
-  var s = ordenamientoPorCargo(data, filtro)
+  ordenamientoPorCargo(data, filtro)
   
   groups
   .transition()
@@ -16,14 +15,36 @@ function mostrarPorCargo(data, ejes, groups, filtro){
   });
 }
 
+var ejesCargoData = {
+  init: false,
+  eje1: {}, 
+  eje2: {}
+}
+
 function ordenamientoPorCargo(data, filtro){
 
-  //TODO: este valor se puede calcular 1 vez y almacenar.
-  var dataDict = _.reduce(data, function(memo, item){ 
+  if(!ejesCargoData.init){
+    _.each(data, function(d){
+      
+      ejesCargoData.eje1[d.cargonominal] = {
+        altura:0, nombre:d.cargonominal, 
+        display: 0
+      };
+      
+      ejesCargoData.eje2[d.cargonominal +  ' | ' + d.territorio] = {
+        altura:0, 
+        nombre:d.territorio, 
+        display: 0, 
+        parentEje: ejesCargoData.eje1[d.cargonominal]
+      };
+
+    });
+  }
+
+  //Reset todas las alturas
+  _.each(data, function(item){ 
     item.__layout.cargo = {display: filtrarCargo(item, filtro), altura: 0}; 
-    memo[item.rowNumber]= item; 
-    return memo; 
-  },{});
+  });
 
   var filteredData = _.filter(data, function(item){
     return item.__layout.cargo.display;
@@ -157,4 +178,48 @@ function getCargosEjeInfo(data){
 
 }
 
+function updateEjesCargo(){
+
+ ejes.ejeCargos0.selectAll('g').data(ejesInfo.cargosEjeInfo.eje0).enter().append('g')
+    .each(function(d){
+      
+      var g = d3.select(this);
+
+      g.append('text')
+          .attr('y',18)
+          .attr('x',5)
+          .text(function(d){ return d.label; })
+
+      g.append("line")
+          .attr("x1",0)
+          .attr("y1",-2)
+          .attr("x2",CHART_WIDTH)
+          .attr("y2",-2)
+          .attr("stroke","#CCC");
+
+    })
+    .attr('transform', function(d){ 
+      var x = 0;
+      var y =  d.altura * OFFSET_Y;
+      return 'translate(' + x + ',' + y + ')'; 
+    })
+  ;
+
+  ejes.ejeCargos1.selectAll('g').data(ejesInfo.cargosEjeInfo.eje1).enter().append('g')
+    .each(function(d){
+      
+      var g = d3.select(this);
+
+      g.append('text')
+          .attr('y',18)
+          .text(function(d){ return d.label; })
+
+    })
+    .attr('transform', function(d){ 
+      var x = 130;
+      var y =  d.altura * OFFSET_Y;
+      return 'translate(' + x + ',' + y + ')'; 
+    })
+  ;
+}
 
