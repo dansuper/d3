@@ -6,6 +6,7 @@ var CHART_HEIGHT = 4800;
 var PIXELS_PER_YEAR = 20;
 var OFFSET_Y = 30;
 var PIXELS_H_OFFSET = 200;
+var TRANSITION_DELAY = 1500;
 
 var thisYear = (new Date()).getFullYear();
 
@@ -38,7 +39,9 @@ inicializarEjes(ejes, data);
 
 tipoGrafico = "nombre"; // posibles valores: ['nombre', 'cargo']
 
-filtro = {};
+filtro = {
+	nombre: ''
+};
 
 layout(data, ejes, groups, tipoGrafico, filtro);
 

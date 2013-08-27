@@ -90,7 +90,6 @@ function activarEjeCargos(){
 
 
 function updateEjePersonas(ejes, personasToAltura){
-  console.log(personasToAltura)
   ejes.ejePersonas.selectAll('g')
   .attr('transform', function(d){
     var x = 0;

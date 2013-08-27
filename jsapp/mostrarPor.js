@@ -17,6 +17,7 @@ function mostrarPorNombre(data, ejes, groups, filtro){
 
   groups
   .transition()
+  .duration(TRANSITION_DELAY)
   .attr('opacity', function(d){ return d.__layout.nombre.display ? 1 : 0 } )
   .attr('transform', function(d){ 
     var x = (parseInt(d.fechainicioyear) - 1970) * PIXELS_PER_YEAR + PIXELS_H_OFFSET;
