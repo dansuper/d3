@@ -55,13 +55,19 @@ filtro = {
     nombre: ''
 };
 
+inicializarCurvas(data);
+
 layout(data, ejes, groups, tipoGrafico, filtro);
 
 setButtonsEventHandlers();
 
 var filtroInput = d3.select('#filtro');
 filtroInput.on('keyup', _.debounce(function() {
-    filtro.nombre = _.filter(_.map(filtroInput[0][0].value.toLowerCase().split(','), function(v){ return v.trim()}), function(v){ return v!==""})
+    filtro.nombre = _.filter(_.map(filtroInput[0][0].value.toLowerCase().split(','), function(v) {
+        return v.trim()
+    }), function(v) {
+        return v !== ""
+    })
     layout(data, ejes, groups, tipoGrafico, filtro);
 }, 400));
 
@@ -133,5 +139,5 @@ svg
     .on("mousemove", mousemove);
 
 function mousemove() {
-    yearMarker.attr("transform", "translate(" + d3.mouse(this)[0] + ", "+ EJE_ANIOS_OFFSET_Y +")");
+    yearMarker.attr("transform", "translate(" + d3.mouse(this)[0] + ", " + EJE_ANIOS_OFFSET_Y + ")");
 }

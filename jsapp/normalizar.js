@@ -11,8 +11,8 @@ function normalizarDatos(data) {
         cargo.territorio = cargo.territorio.trim().toLowerCase();
         cargo.nombre = cargo.nombre.trim().toLowerCase();
         cargo.cargonominal = cargo.cargonominal.trim().toLowerCase();
-        cargo.fechainicioyear = parseInt(cargo.fechainicioyear);
-        cargo.fechafinyear = parseInt(cargo.fechafinyear) || thisYear;
+        cargo.fechainicioyear = parseInt(cargo.fechainicioyear, 10);
+        cargo.fechafinyear = parseInt(cargo.fechafinyear, 10) || thisYear;
         cargo.__layout = {}; //Esto va a tener la info de layout
     });
 }

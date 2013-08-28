@@ -11,7 +11,7 @@ function crearEjeAnios(data, svg, xScale) {
         .tickValues(anios);
 
     svg.append("g").attr("class", "axis")
-        .attr("transform", "translate(0," + EJE_ANIOS_OFFSET_Y +")")
+        .attr("transform", "translate(0," + EJE_ANIOS_OFFSET_Y + ")")
         .call(xAxis);
 
 }
@@ -22,11 +22,11 @@ function getAniosMasUsados(data, corte) {
     var toOrder = [];
     var i, count = {};
     var anios = data.map(function(cargo) {
-        return parseInt(cargo['fechainicioyear'])
+        return parseInt(cargo['fechainicioyear'], 10)
     });
 
     anios.concat(data.map(function(cargo) {
-        return parseInt(cargo['fechafinyear'])
+        return parseInt(cargo['fechafinyear'], 10)
     }));
 
     for (i = 0; i < anios.length; i++) {

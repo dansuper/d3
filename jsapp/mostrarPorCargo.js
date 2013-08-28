@@ -12,7 +12,7 @@ function mostrarPorCargo(data, ejes, groups, filtro) {
         })
         .attr('transform', function(d) {
             var x = xScale(d.fechainicioyear);
-            var y =  d.__layout.cargo.display ? (d.__layout.cargo.altura * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO ;
+            var y = d.__layout.cargo.display ? (d.__layout.cargo.altura * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
             return 'translate(' + x + ',' + y + ')';
         });
 
@@ -39,6 +39,8 @@ function mostrarPorCargo(data, ejes, groups, filtro) {
             var y = d.display ? (d.altura * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
             return 'translate(' + x + ',' + y + ')';
         });
+
+    actualizarLayoutCurvas();
 
 }
 

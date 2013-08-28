@@ -33,6 +33,8 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
             var y = d.__layout.nombre.display ? (personasToAltura[d.nombre] * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
             return 'translate(' + x + ',' + y + ')';
         });
+
+    ocultarCurvas();
 }
 
 function updateEjePersonas(ejes, personasToAltura) {
