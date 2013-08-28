@@ -3,9 +3,11 @@ var CHART_WIDTH = 1300;
 var CHART_HEIGHT = 4800;
 
 var PIXELS_PER_YEAR = 20;
-var OFFSET_Y = 30;
+var ALTO_BLOQUES = 30; //Alto de los bloques
 var PIXELS_H_OFFSET = 200;
 var TRANSITION_DELAY = 1500;
+var OFFSET_Y = 40; // USado para mover verticalmente los  blques y el eje vertical
+var EJE_ANIOS_OFFSET_Y = 8;
 
 var thisYear = (new Date()).getFullYear();
 
@@ -13,6 +15,7 @@ var mostrandoPor = "nombre";
 
 var svg;
 
+//Estos 2 valores se recalculan después
 var primerStartingYear = 2000;
 var ultimoEndingYear = 2000;
 
@@ -102,10 +105,31 @@ function buildxScale(data) {
     var xScale = d3.scale.linear() // DEFINE ESCALA/RANGO DE EJE X
     .domain([primerStartingYear - 2, ultimoEndingYear + 2]) // RANGO DE AÃ‘OS DE ENTRADA
     .rangeRound([
-	    PIXELS_H_OFFSET, // Límite izquierdo pixels
-	    CHART_WIDTH //Limite derecho en pixels
-    ]); 
+        PIXELS_H_OFFSET, // Límite izquierdo pixels
+        CHART_WIDTH //Limite derecho en pixels
+    ]);
 
     return xScale;
 
+}
+
+//*** CIRCULITO QUE MARCA EL AÑO CUANDO EL MOUSE SE MUEVE 
+var yearMarker = svg.append("g")
+    .attr("class", "yearMarker")
+    .style("display", "none");
+
+yearMarker.append("circle")
+    .attr("r", 5);
+
+svg
+    .on("mouseover", function() {
+        yearMarker.style("display", null);
+    })
+    .on("mouseout", function() {
+        yearMarker.style("display", "none");
+    })
+    .on("mousemove", mousemove);
+
+function mousemove() {
+    yearMarker.attr("transform", "translate(" + d3.mouse(this)[0] + ", "+ EJE_ANIOS_OFFSET_Y +")");
 }

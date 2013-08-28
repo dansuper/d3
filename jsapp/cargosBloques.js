@@ -19,7 +19,7 @@ function inicializarCargosBloques(data) {
 
             g.append('rect')
                 .attr('width', xScale(d.fechafinyear) - xScale(d.fechainicioyear) - 2)
-                .attr('height', 25)
+                .attr('height', ALTO_BLOQUES - 4)
                 .attr('class', function(d) {
                     return d.cargotipo;
                 })

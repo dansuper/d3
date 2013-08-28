@@ -30,7 +30,7 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
         })
         .attr('transform', function(d) {
             var x = xScale(d.fechainicioyear);
-            var y = personasToAltura[d.nombre] * OFFSET_Y || 0;
+            var y = (personasToAltura[d.nombre] * ALTO_BLOQUES || 0) + OFFSET_Y;
             return 'translate(' + x + ',' + y + ')';
         });
 }
@@ -39,7 +39,7 @@ function updateEjePersonas(ejes, personasToAltura) {
     ejes.ejePersonas.selectAll('g')
         .attr('transform', function(d) {
             var x = 0;
-            var y = personasToAltura[d.nombre] * OFFSET_Y || 0;
+            var y = (personasToAltura[d.nombre] * ALTO_BLOQUES || 0) + OFFSET_Y;
             return 'translate(' + x + ',' + y + ')';
         })
         .attr('opacity', function(d) {
@@ -71,9 +71,9 @@ function inicializarEjeNombre(ejes, ejesInfo) {
 
             g.append("line")
                 .attr("x1", 0)
-                .attr("y1", OFFSET_Y - 3)
+                .attr("y1", -2)
                 .attr("x2", CHART_WIDTH)
-                .attr("y2", OFFSET_Y - 3)
+                .attr("y2", -2)
                 .attr("stroke", "#CCC");
 
         })

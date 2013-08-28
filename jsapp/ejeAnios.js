@@ -11,7 +11,7 @@ function crearEjeAnios(data, svg, xScale) {
         .tickValues(anios);
 
     svg.append("g").attr("class", "axis")
-        .attr("transform", "translate(0,0)")
+        .attr("transform", "translate(0," + EJE_ANIOS_OFFSET_Y +")")
         .call(xAxis);
 
 }
