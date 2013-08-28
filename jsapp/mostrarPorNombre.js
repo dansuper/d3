@@ -29,3 +29,42 @@ function mostrarPorNombre(data, ejes, groups, filtro){
   ;
 }
 
+function updateEjePersonas(ejes, personasToAltura){
+  ejes.ejePersonas.selectAll('g')
+  .attr('transform', function(d){
+    var x = 0;
+    var y = personasToAltura[d.nombre] * OFFSET_Y || 0;
+    return 'translate(' + x + ',' + y + ')'; 
+  })
+  .attr('opacity', function(d){
+    return personasToAltura[d.nombre] !== undefined ? 1 : 0;
+  })
+  ;
+}
+
+function inicializarEjeNombre(ejes, ejesInfo){
+
+  var dataEjePersonas = _.sortBy( _.map(_.groupBy(data, function(d){ return d.nombre}), function(v,k){ return {nombre: k};}) , 'nombre');
+
+  ejes.ejePersonas.selectAll('g').data(dataEjePersonas).enter().append('g')
+    .each(function(d, ix){
+
+      var g = d3.select(this);
+
+      g.append('text')
+          .attr('y',18)
+          .attr('x',5)
+          .text(function(d){ return d.nombre; })
+
+      g.append("line")
+          .attr("x1",0)
+          .attr("y1",OFFSET_Y - 3)
+          .attr("x2",CHART_WIDTH)
+          .attr("y2",OFFSET_Y - 3)
+          .attr("stroke","#CCC");
+
+    })
+ 
+    ;
+
+}

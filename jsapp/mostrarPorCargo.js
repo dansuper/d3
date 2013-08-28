@@ -13,35 +13,110 @@ function mostrarPorCargo(data, ejes, groups, filtro){
     var y = d.__layout.cargo.altura * OFFSET_Y || 0;
     return 'translate(' + x + ',' + y + ')'; 
   });
+
+  ejes.ejeCargos0
+  .selectAll('g')
+  .transition()
+  .attr('opacity', function(d){ return d.display ? 1 : 0 } )
+  .attr('transform', function(d){
+    var x = 0;
+    var y =  d.altura * OFFSET_Y || 0;
+    return 'translate(' + x + ',' + y + ')'; 
+  })
+  ;
+
+  ejes.ejeCargos1
+  .selectAll('g')
+  .transition()
+  .attr('opacity', function(d){ return d.display ? 1 : 0 } )
+  .attr('transform', function(d){
+    var x = 200;
+    var y =  d.altura * OFFSET_Y || 0;
+    return 'translate(' + x + ',' + y + ')'; 
+  })
+  ;
+
 }
 
-var ejesCargoData = {
-  init: false,
-  eje1: {}, 
-  eje2: {}
+
+function inicializarDataEjesCargos(data, ejes, ejesCargoData){
+
+  _.each(data, function(d){
+    
+    ejesCargoData.eje1[d.cargonominal] = {
+      altura: 0, 
+      nombre: d.cargonominal, 
+      display: false
+    };
+    
+    ejesCargoData.eje2[d.cargonominal +  ' | ' + d.territorio] = {
+      altura: 0, 
+      nombre: d.territorio, 
+      display: false, 
+      parentEje: ejesCargoData.eje1[d.cargonominal]
+    };
+
+  });
+
+  ejes.ejeCargos0
+    .selectAll('g')
+    .data( _.map(ejesCargoData.eje1, function(d){ return d; }) )
+    .enter()
+    .append('g')
+    .attr('opacity', 0)
+    .each(function(d){
+      
+      var g = d3.select(this);
+
+      g.append('text')
+          .attr('y',18)
+          .attr('x',5)
+          .text(function(d){ return d.nombre; })
+
+      g.append("line")
+          .attr("x1",0)
+          .attr("y1",-2)
+          .attr("x2",CHART_WIDTH)
+          .attr("y2",-2)
+          .attr("stroke","#CCC");
+
+    })
+  ;
+
+  ejes.ejeCargos1
+    .selectAll('g')
+    .data(_.map(ejesCargoData.eje2, function(d){ return d; }))
+    .enter()
+    .append('g')
+    .attr('opacity', 0)
+    .each(function(d){
+      
+      var g = d3.select(this);
+
+      g.append('text')
+          .attr('y',18)
+          .text(function(d){ return d.nombre; })
+
+    })
+  ;
+
+
 }
 
 function ordenamientoPorCargo(data, filtro){
 
-  if(!ejesCargoData.init){
-    _.each(data, function(d){
-      
-      ejesCargoData.eje1[d.cargonominal] = {
-        altura:0, nombre:d.cargonominal, 
-        display: 0
-      };
-      
-      ejesCargoData.eje2[d.cargonominal +  ' | ' + d.territorio] = {
-        altura:0, 
-        nombre:d.territorio, 
-        display: 0, 
-        parentEje: ejesCargoData.eje1[d.cargonominal]
-      };
+  //Reset las alturas de los ejes
+  _.each(ejesCargoData.eje1, function(d){
+    d.altura = 0;
+    d.display = 0;
+  });
 
-    });
-  }
+  _.each(ejesCargoData.eje2, function(d){
+    d.altura = 0;
+    d.display = 0;
+  });
 
-  //Reset todas las alturas
+  //Reset todas las alturas de los cargos
   _.each(data, function(item){ 
     item.__layout.cargo = {display: filtrarCargo(item, filtro), altura: 0}; 
   });
@@ -74,7 +149,7 @@ function ordenamientoPorCargo(data, filtro){
     var alturaMax = 0;
     
     ordenarPorNombreyFechaInicioYear(cargos);
-    console.log(cargos)
+    
     _.each(cargos, function(cargo){
       
       cargo.altura = -1;
@@ -97,6 +172,17 @@ function ordenamientoPorCargo(data, filtro){
       procesados.push(cargo);
 
       cargo.__layout.cargo.altura = alturaCargoNominal + cargo.altura; //Este es el offset Y total
+      
+      //Altura del label del eje2
+      var keyEje2 = cargo.cargonominal +  ' | ' + cargo.territorio;
+      if(!ejesCargoData.eje2[keyEje2].display){
+        ejesCargoData.eje2[keyEje2].display = true;
+        ejesCargoData.eje2[keyEje2].altura = cargo.__layout.cargo.altura;
+        if(!ejesCargoData.eje1[cargo.cargonominal].display){
+          ejesCargoData.eje1[cargo.cargonominal].display = true;
+          ejesCargoData.eje1[cargo.cargonominal].altura = cargo.__layout.cargo.altura;
+        }
+      }
 
     });
     
@@ -129,97 +215,5 @@ function ordenarPorNombreyFechaInicioYear(cargos){
   cargos.sort(function(a,b){ 
     return strCmp(a.nombre, b.nombre) ||  strCmp(a.territorio, b.territorio) || (a.fechainicioyear - b.fechainicioyear);
   });
-}
-
-function getCargosEjeInfo(data){
-  var cargosProcesados = ordenamientoPorCargo(data);
-
-  cargosProcesados.sort(function(a,b){ return strCmp(a.nombre, b.nombre);});
-
-  var alturasPorCargo = {};
-  var eje0 = [];
-  var eje1 = [];
-  var alturaBase = 0;
-  var prevCargo = null;
-  var cantSubItems = 0;
-
-  _.each(cargosProcesados, function(agrupado){
-    
-    var s = agrupado.nombre.split(' | ');
-    var cargonominal = s[0];
-    var territorio = s[1];
-
-    _.each(agrupado.cargos, function(cargo){
-      alturasPorCargo[cargo.rowNumber] = cargo.altura + alturaBase;
-    });
-    
-    if(cargonominal !== prevCargo){
-      eje0.push({
-        label: cargonominal, 
-        altura: alturaBase
-      });
-      prevCargo = cargonominal;
-      cantSubItems = 0;
-    }
-
-    eje1.push({
-      label: territorio, 
-      altura: alturaBase
-    });
-
-    alturaBase += agrupado.altura + 1;
-  });
-
-  return {
-    alturasPorCargo: alturasPorCargo, 
-    eje0: eje0, 
-    eje1: eje1
-  } ;
-
-}
-
-function updateEjesCargo(){
-
- ejes.ejeCargos0.selectAll('g').data(ejesInfo.cargosEjeInfo.eje0).enter().append('g')
-    .each(function(d){
-      
-      var g = d3.select(this);
-
-      g.append('text')
-          .attr('y',18)
-          .attr('x',5)
-          .text(function(d){ return d.label; })
-
-      g.append("line")
-          .attr("x1",0)
-          .attr("y1",-2)
-          .attr("x2",CHART_WIDTH)
-          .attr("y2",-2)
-          .attr("stroke","#CCC");
-
-    })
-    .attr('transform', function(d){ 
-      var x = 0;
-      var y =  d.altura * OFFSET_Y;
-      return 'translate(' + x + ',' + y + ')'; 
-    })
-  ;
-
-  ejes.ejeCargos1.selectAll('g').data(ejesInfo.cargosEjeInfo.eje1).enter().append('g')
-    .each(function(d){
-      
-      var g = d3.select(this);
-
-      g.append('text')
-          .attr('y',18)
-          .text(function(d){ return d.label; })
-
-    })
-    .attr('transform', function(d){ 
-      var x = 130;
-      var y =  d.altura * OFFSET_Y;
-      return 'translate(' + x + ',' + y + ')'; 
-    })
-  ;
 }
 

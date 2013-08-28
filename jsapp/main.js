@@ -35,7 +35,14 @@ ejes = {
 	ejePersonas: svg.select('#ejePersonas')
 };
 
-inicializarEjes(ejes, data);
+inicializarEjeNombre(ejes, data); //Eje por nombre
+
+var ejesCargoData = {
+  eje1: {}, 
+  eje2: {}
+};
+
+inicializarDataEjesCargos(data, ejes, ejesCargoData);
 
 tipoGrafico = "nombre"; // posibles valores: ['nombre', 'cargo']
 
