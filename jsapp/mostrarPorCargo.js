@@ -6,7 +6,7 @@ function mostrarPorCargo(data, ejes, groups, filtro) {
 
     groups
         .transition()
-        .duration(TRANSITION_DELAY)
+        .duration(TRANSITION_DURATION)
         .attr('opacity', function(d) {
             return d.__layout.cargo.display ? 1 : 0
         })

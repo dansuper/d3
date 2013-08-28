@@ -5,7 +5,7 @@ var CHART_HEIGHT = 4800;
 var PIXELS_PER_YEAR = 20;
 var ALTO_BLOQUES = 30; //Alto de los bloques
 var PIXELS_H_OFFSET = 200;
-var TRANSITION_DELAY = 1500;
+var TRANSITION_DURATION = 1500;
 var OFFSET_Y = 40; // USado para mover verticalmente los  blques y el eje vertical
 var EJE_ANIOS_OFFSET_Y = 8;
 

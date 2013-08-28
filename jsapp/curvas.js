@@ -32,10 +32,12 @@ function inicializarCurvas(data) {
 }
 
 function actualizarLayoutCurvas() {
-    var controlLenght = 100;
+    var controlLenght = 20;
     var OFFSET_Y_CURVAS = 10;
 
     curvas
+        .transition()
+        .duration(TRANSITION_DURATION)
         .attr('d', function(d) {
 
             var fromX = xScale(d.izq.fechafinyear) - 2;

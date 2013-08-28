@@ -24,7 +24,7 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
 
     groups
         .transition()
-        .duration(TRANSITION_DELAY)
+        .duration(TRANSITION_DURATION)
         .attr('opacity', function(d) {
             return d.__layout.nombre.display ? 1 : 0
         })
