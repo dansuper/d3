@@ -58,11 +58,14 @@
 
 	<div class="allContainer">
 		<div>
-			<button id="btn1">por persona</button>
-			<button id="btn2">por cargo</button>
+			<label>Agrupar:</label> 
+			<input type="radio" id="radAgrupar-persona" name="radAgrupar" value="persona" checked="checked"/>
+			<label for="radAgrupar-persona">por persona</label> 
+			<input type="radio" id="radAgrupar-cargo" name="radAgrupar" value="cargo" />
+			<label for="radAgrupar-cargo">por cargo</label> 
 		</div>
 		<div id="filtroContainer">
-			<input type="text" id="filtro">
+			<label for="filtro">Nombre:</label><input type="text" id="filtro">
 		</div>
 		<div id="svgContainer"></div>
 	</div>
@@ -88,7 +91,6 @@
 
 	<script src="jsapp/cargosData.js"></script>
 	<script src="jsapp/normalizar.js"></script>
-	<script src="jsapp/ordenamientoPorCargo.js"></script>
 	<script src="jsapp/tooltip.js"></script>
 	<script src="jsapp/cargosBloques.js"></script>
 	<script src="jsapp/ejes.js"></script>

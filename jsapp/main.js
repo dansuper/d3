@@ -66,12 +66,12 @@ function resetSVGCanvas(){
 
 function setButtonsEventHandlers(){
   // Event handlers para los botones
-  d3.select('#btn1').on('click', function(){
+  d3.select('#radAgrupar-persona').on('click', function(){
   	tipoGrafico = "nombre";
     layout(data, ejes, groups, tipoGrafico, filtro);
   });
 
-  d3.select('#btn2').on('click', function(){
+  d3.select('#radAgrupar-cargo').on('click', function(){
   	tipoGrafico = "cargo";
     layout(data, ejes, groups, tipoGrafico, filtro);
   });  
