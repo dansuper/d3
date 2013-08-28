@@ -30,7 +30,7 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
         })
         .attr('transform', function(d) {
             var x = xScale(d.fechainicioyear);
-            var y = (personasToAltura[d.nombre] * ALTO_BLOQUES || 0) + OFFSET_Y;
+            var y = d.__layout.nombre.display ? (personasToAltura[d.nombre] * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
             return 'translate(' + x + ',' + y + ')';
         });
 }
@@ -39,7 +39,7 @@ function updateEjePersonas(ejes, personasToAltura) {
     ejes.ejePersonas.selectAll('g')
         .attr('transform', function(d) {
             var x = 0;
-            var y = (personasToAltura[d.nombre] * ALTO_BLOQUES || 0) + OFFSET_Y;
+            var y = personasToAltura[d.nombre] !== undefined ? (personasToAltura[d.nombre] * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
             return 'translate(' + x + ',' + y + ')';
         })
         .attr('opacity', function(d) {

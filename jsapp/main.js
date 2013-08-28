@@ -9,6 +9,8 @@ var TRANSITION_DELAY = 1500;
 var OFFSET_Y = 40; // USado para mover verticalmente los  blques y el eje vertical
 var EJE_ANIOS_OFFSET_Y = 8;
 
+var ALTURA_OCULTAMIENTO = CHART_HEIGHT; // Los elementos se van a mover acá cuando no se muestren
+
 var thisYear = (new Date()).getFullYear();
 
 var mostrandoPor = "nombre";
