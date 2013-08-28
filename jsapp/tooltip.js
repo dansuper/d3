@@ -1,5 +1,9 @@
-var tooltipEl = d3.select('#tooltip');
-var tooltipTemplate = _.template(document.getElementById('tooltipTemplate').innerHTML);
+var tooltipEl, tooltipTemplate;
+
+function initTooltip(){
+	tooltipEl = d3.select('#tooltip');
+	tooltipTemplate = _.template(document.getElementById('tooltipTemplate').innerHTML);	
+}
 
 function showTooltip(d){
 	tooltipEl.html(tooltipTemplate(d));

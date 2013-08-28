@@ -14,19 +14,12 @@ var mostrandoPor = "nombre";
 
 normalizarDatos(data);
 
-resetSVGCanvas(); 
+resetSVGCanvas();
 
 // Esto inicializa los rectángulos que representan a los cargos
 groups = inicializarCargosBloques(data);
 
-/*
-// Inicialización de los datos de los ejes
-ejesInfo = {
-	personasEjeInfo: getPersonasEjeInfo(data),
-	cargosEjeInfo: getCargosEjeInfo(data)
-};
-
-*/
+initTooltip();
 
 //global ejes
 ejes = { 
@@ -59,7 +52,6 @@ filtroInput.on('keyup', _.debounce(function (){
 	filtro.nombre = filtroInput[0][0].value.toLowerCase().trim();
 	layout(data, ejes, groups, tipoGrafico, filtro);
 }, 400));
-
 
 function resetSVGCanvas(){
 
