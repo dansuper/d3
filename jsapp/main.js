@@ -61,7 +61,7 @@ setButtonsEventHandlers();
 
 var filtroInput = d3.select('#filtro');
 filtroInput.on('keyup', _.debounce(function() {
-    filtro.nombre = filtroInput[0][0].value.toLowerCase().trim();
+    filtro.nombre = _.filter(_.map(filtroInput[0][0].value.toLowerCase().split(','), function(v){ return v.trim()}), function(v){ return v!==""})
     layout(data, ejes, groups, tipoGrafico, filtro);
 }, 400));
 
