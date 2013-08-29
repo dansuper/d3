@@ -68,6 +68,10 @@
 			stroke: #000;
 			stroke-width: 2px;
 		}
+		#filtroContainer span{
+			font-size: 9px;
+			color: #888;
+		}
 	</style>
 	<script src="jslib/d3.v3.js" ></script>
 	<script src="jslib/underscore-min.js" ></script>
@@ -83,7 +87,7 @@
 			<label for="radAgrupar-cargo">por cargo</label> 
 		</div>
 		<div id="filtroContainer">
-			<label for="filtro">Nombre:</label><input type="text" id="filtro">
+			<label for="filtro">Nombre:</label><input type="text" id="filtro"><span>(varios separados por coma. ej: cris, kunk)</span>
 		</div>
 		<div id="svgContainer"></div>
 	</div>
