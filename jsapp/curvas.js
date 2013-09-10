@@ -1,5 +1,7 @@
 var curvas;
 var curvasData = [];
+var color = d3.scale.category20();
+var ii = 0;
 
 function inicializarCurvas(data) {
 
@@ -7,14 +9,16 @@ function inicializarCurvas(data) {
         return d.nombre;
     });
 
-    _.each(personas, function(d) {
+    _.each(personas, function(d,index) {
         var i;
         var cargosDeLaPersona = _.sortBy(d, 'fechainicioyear')
+
 
         for (i = 0; i < cargosDeLaPersona.length - 1; i++) {
             curvasData.push({
                 izq: cargosDeLaPersona[i],
-                der: cargosDeLaPersona[i + 1]
+                der: cargosDeLaPersona[i + 1],
+                colorStroke: color(index)
             });
         }
 
@@ -25,9 +29,10 @@ function inicializarCurvas(data) {
         .data(curvasData)
         .enter()
         .append('path')
-        .attr('opacity', 0)
+        .attr('display', 0)
         .attr('fill', 'none')
-        .attr('stroke', 'red');
+        .attr('stroke', 'red')
+        .attr('stroke-width', '2px');
 
 }
 
@@ -56,9 +61,10 @@ function actualizarLayoutCurvas() {
             return "M" + fromX + "," + fromY + " C" + control1X + "," + control1Y + " " + contorl2X + "," + control2Y + " " + toX + "," + toY;
 
         })
-        .attr('opacity', 1);
+        .attr('stroke', function(d){return d.colorStroke})
+        .attr('display', 1);
 }
 
 function ocultarCurvas() {
-    curvas.attr('opacity', 0);
+    curvas.attr('display', 0);
 }
