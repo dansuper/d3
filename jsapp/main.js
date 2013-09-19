@@ -1,6 +1,6 @@
 // "Constantes"
 var CHART_WIDTH = 1300;
-var CHART_HEIGHT = 4800;
+var CHART_HEIGHT = 4800; //Not a constant anymore, hay que renombrar
 
 var PIXELS_PER_YEAR = 20;
 var ALTO_BLOQUES = 30; //Alto de los bloques
@@ -21,8 +21,10 @@ var svg;
 var primerStartingYear = 2000;
 var ultimoEndingYear = 2000;
 
-
+data = __cargos_data;
 normalizarDatos(data);
+
+CHART_HEIGHT = ALTO_BLOQUES * _.size(_.groupBy(data, function(d){return d.nombre})) + 50;
 
 resetSVGCanvas();
 
