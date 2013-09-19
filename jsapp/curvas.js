@@ -29,7 +29,7 @@ function inicializarCurvas(data) {
         .data(curvasData)
         .enter()
         .append('path')
-        .attr('display', 0)
+        .attr('opacity', 0)
         .attr('fill', 'none')
         .attr('stroke', 'red')
         .attr('stroke-width', '2px');
@@ -41,6 +41,7 @@ function actualizarLayoutCurvas() {
     var OFFSET_Y_CURVAS = 10;
 
     curvas
+        .attr('opacity', 1)
         .transition()
         .duration(TRANSITION_DURATION)
         .attr('d', function(d) {
@@ -62,9 +63,9 @@ function actualizarLayoutCurvas() {
 
         })
         .attr('stroke', function(d){return d.colorStroke})
-        .attr('display', 1);
+        ;
 }
 
 function ocultarCurvas() {
-    curvas.attr('display', 0);
+    curvas.attr('opacity', 0)
 }
