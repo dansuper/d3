@@ -10,15 +10,62 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
         };
     });
 
+    //Acá va el ordenamiento de las personas
     var listaPersonas = _.map(nombresAMostrar, function(value, key) {
         return key
     }).sort();
-    var personasToAltura = _.reduce(listaPersonas, function(memo, value, index) {
-        memo[value] = index;
-        return memo;
-    }, {});
+
+    var cargosAMostrar = _.filter(data, function(d){
+        return d.__layout.nombre.display;
+    });
+
+    var cargosPorPersonas = _.groupBy(cargosAMostrar, function(c){
+        return c.nombre;
+    });
+
+    var alturasPersona = {};
+
+    var alturaTotal = 0;
+    _.each(listaPersonas, function(persona, ix){
+
+
+        alturasPersona[persona] = 0;
+        var currentAltura = 0;
+        var cargos = cargosPorPersonas[persona].sort(function(a,b){return a.fechainicioyear - b.fechainicioyear ;});
+        var cargo;
+        var processedCargos = [];
+        var i;
+
+        while(cargo = cargos.shift()){
+
+            var collision = false;
+            for(i=0;i<processedCargos.length;i++){
+                var cargoProcesado = processedCargos[i];
+                if(cargoProcesado.fechafinyear > cargo.fechainicioyear){
+                    collision = true;
+                }
+            }
+
+            if(collision) {
+                currentAltura++;
+            }
+            cargo.altura = currentAltura;
+            processedCargos.push(cargo);
+        }
+        
+        alturasPersona[persona] = currentAltura;
+
+    });
 
     activarEjePersonas();
+
+    var personasToAltura = {}; 
+    var acumH = 0;
+
+    _.each(listaPersonas,  function(persona){
+        personasToAltura[persona] = acumH;
+        acumH += (1 + alturasPersona[persona]);
+    });
 
     updateEjePersonas(ejes, personasToAltura);
 
@@ -30,7 +77,7 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
         })
         .attr('transform', function(d) {
             var x = xScale(d.fechainicioyear);
-            var y = d.__layout.nombre.display ? (personasToAltura[d.nombre] * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
+            var y = d.__layout.nombre.display ? ( (personasToAltura[d.nombre] + d.altura) * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
             return 'translate(' + x + ',' + y + ')';
         });
 
