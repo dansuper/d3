@@ -93,8 +93,8 @@
 	</div>
 
 	<script id="tooltipTemplate" type="text/template">
-		<b><%- nombre %></b><br>
-		<%- cargonominal %><br> 
+		<b><%- persona.nombre + ' ' + persona.apellido %></b><br>
+		<%- nominal.nombre %><br> 
 		<span class="detalles">
 			<%- fechainicioyear %> - <%- fechafinyear %><br>
 			<%- territorio %>
@@ -112,7 +112,7 @@
 		<div id="tooltip"></div>
 	</script>
 
-	<script src="http://cargografias.org/cargosdataendpoint.php"></script>
+	<script src="http://cargografias.org/cargosdataendpoint3.php"></script>
 	<script src="jsapp/normalizar.js"></script>
 	<script src="jsapp/tooltip.js"></script>
 	<script src="jsapp/cargosBloques.js"></script>

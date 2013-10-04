@@ -1,6 +1,7 @@
 function crearEjeAnios(data, svg, xScale) {
 
     var anios = getAniosMasUsados(data, 10);
+    console.log(anios)
     anios.push(primerStartingYear, ultimoEndingYear);
     anios.push(1976, 1983);
 
@@ -21,11 +22,11 @@ function getAniosMasUsados(data, corte) {
     var ret;
     var toOrder = [];
     var i, count = {};
-    var anios = data.map(function(cargo) {
+    var anios = data.cargos.map(function(cargo) {
         return parseInt(cargo['fechainicioyear'], 10)
     });
 
-    anios.concat(data.map(function(cargo) {
+    anios.concat(data.cargos.map(function(cargo) {
         return parseInt(cargo['fechafinyear'], 10)
     }));
 
@@ -50,5 +51,5 @@ function getAniosMasUsados(data, corte) {
 
     return ret.map(function(item) {
         return item.anio;
-    });
+    }).sort();
 }

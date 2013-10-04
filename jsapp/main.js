@@ -24,7 +24,7 @@ var ultimoEndingYear = 2000;
 data = __cargos_data;
 normalizarDatos(data);
 
-CHART_HEIGHT = ALTO_BLOQUES * _.size(_.groupBy(data, function(d){return d.nombre})) + 50;
+CHART_HEIGHT = ALTO_BLOQUES * _.size(_.groupBy(data.cargos, function(d){return d.persona_id})) + 50;
 
 resetSVGCanvas();
 
@@ -54,7 +54,7 @@ inicializarDataEjesCargos(data, ejes, ejesCargoData);
 tipoGrafico = "nombre"; // posibles valores: ['nombre', 'cargo']
 
 filtro = {
-    nombre: ''
+    personas : {}
 };
 
 inicializarCurvas(data);
@@ -65,11 +65,24 @@ setButtonsEventHandlers();
 
 var filtroInput = d3.select('#filtro');
 filtroInput.on('keyup', _.debounce(function() {
-    filtro.nombre = _.filter(_.map(filtroInput[0][0].value.toLowerCase().split(','), function(v) {
+    var nombres = _.filter(_.map(filtroInput[0][0].value.toLowerCase().split(','), function(v) {
         return v.trim()
     }), function(v) {
         return v !== ""
     })
+
+    var personasQueVan = _.filter(data.personas, function(p){
+        var nombre = (p.nombre + ' ' + p.apellido).toLowerCase();
+        for(var i = 0; i<nombres.length ; i++){
+            if(nombre.indexOf(nombres[i]) > -1){
+                return true;
+            }
+        }
+        return false;
+    });
+
+    filtro.personas = _.reduce(personasQueVan, function(memo, p){ memo[p.id] = p; }, {});
+
     layout(data, ejes, groups, tipoGrafico, filtro);
 }, 400));
 
@@ -103,7 +116,7 @@ function setButtonsEventHandlers() {
 function buildxScale(data) {
     // Armar el xScale
 
-    _.each(data, function(d) {
+    _.each(data.cargos, function(d) {
         if (d.fechainicioyear < primerStartingYear) {
             primerStartingYear = d.fechainicioyear;
         }

@@ -2,36 +2,41 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
 
     var nombresAMostrar = {};
 
-    _.each(data, function(d) {
+    //Filtrar los cargos
+    _.each(data.cargos, function(d) {
         var display = filtrarCargo(d, filtro);
-        if (display) nombresAMostrar[d.nombre] = 1;
+        if (display) nombresAMostrar[d.persona_id] = 1;
         d.__layout.nombre = {
             display: display
         };
     });
 
     //Acá va el ordenamiento de las personas
-    var listaPersonas = _.map(nombresAMostrar, function(value, key) {
+    var listaPersonas = _.sortBy(_.map(nombresAMostrar, function(value, key) {
         return key
-    }).sort();
+    }),function(persona_id){ return data.hashPersonas[persona_id].nombre + ' ' + data.hashPersonas[persona_id].apellido });
 
-    var cargosAMostrar = _.filter(data, function(d){
+    var cargosAMostrar = _.filter(data.cargos, function(d){
         return d.__layout.nombre.display;
     });
 
     var cargosPorPersonas = _.groupBy(cargosAMostrar, function(c){
-        return c.nombre;
+        return c.persona_id;
     });
 
     var alturasPersona = {};
 
     var alturaTotal = 0;
-    _.each(listaPersonas, function(persona, ix){
+    _.each(listaPersonas, function(persona_id, ix){
 
 
-        alturasPersona[persona] = 0;
+        alturasPersona[persona_id] = 0;
         var currentAltura = 0;
-        var cargos = cargosPorPersonas[persona].sort(function(a,b){return a.fechainicioyear - b.fechainicioyear ;});
+        var cargos = cargosPorPersonas[persona_id];
+        if(!cargos) return;
+
+        cargos.sort(function(a,b){return a.fechainicioyear - b.fechainicioyear ;});
+
         var cargo;
         var processedCargos = [];
         var i;
@@ -53,7 +58,7 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
             processedCargos.push(cargo);
         }
         
-        alturasPersona[persona] = currentAltura;
+        alturasPersona[persona_id] = currentAltura;
 
     });
 
@@ -62,9 +67,9 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
     var personasToAltura = {}; 
     var acumH = 0;
 
-    _.each(listaPersonas,  function(persona){
-        personasToAltura[persona] = acumH;
-        acumH += (1 + alturasPersona[persona]);
+    _.each(listaPersonas,  function(persona_id){
+        personasToAltura[persona_id] = acumH;
+        acumH += (1 + alturasPersona[persona_id]);
     });
 
     updateEjePersonas(ejes, personasToAltura);
@@ -77,7 +82,7 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
         })
         .attr('transform', function(d) {
             var x = xScale(d.fechainicioyear);
-            var y = d.__layout.nombre.display ? ( (personasToAltura[d.nombre] + d.altura) * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
+            var y = d.__layout.nombre.display ? ( (personasToAltura[d.persona_id] + d.altura) * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
             return 'translate(' + x + ',' + y + ')';
         });
 
@@ -88,23 +93,17 @@ function updateEjePersonas(ejes, personasToAltura) {
     ejes.ejePersonas.selectAll('g')
         .attr('transform', function(d) {
             var x = 0;
-            var y = personasToAltura[d.nombre] !== undefined ? (personasToAltura[d.nombre] * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
+            var y = personasToAltura[d.id] !== undefined ? (personasToAltura[d.id] * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
             return 'translate(' + x + ',' + y + ')';
         })
         .attr('opacity', function(d) {
-            return personasToAltura[d.nombre] !== undefined ? 1 : 0;
+            return personasToAltura[d.id] !== undefined ? 1 : 0;
         });
 }
 
 function inicializarEjeNombre(ejes, ejesInfo) {
 
-    var dataEjePersonas = _.sortBy(_.map(_.groupBy(data, function(d) {
-        return d.nombre
-    }), function(v, k) {
-        return {
-            nombre: k
-        };
-    }), 'nombre');
+    var dataEjePersonas = _.sortBy(data.personas, function(p){ return p.nombre + ' ' + p.apellido });
 
     ejes.ejePersonas.selectAll('g').data(dataEjePersonas).enter().append('g')
         .each(function(d, ix) {
@@ -115,7 +114,7 @@ function inicializarEjeNombre(ejes, ejesInfo) {
                 .attr('y', 18)
                 .attr('x', 5)
                 .text(function(d) {
-                    return d.nombre;
+                    return d.nombre + ' ' + d.apellido;
                 })
 
             g.append("line")

@@ -9,7 +9,7 @@
 function inicializarCargosBloques(data) {
 
     var cargosBloques = svg.select('#cargos').selectAll('g')
-        .data(data)
+        .data(data.cargos)
         .enter()
         .append('g')
         .attr('opacity', 0)
@@ -30,7 +30,7 @@ function inicializarCargosBloques(data) {
                 .attr('font-size', 8)
                 .attr('class', 'cargo')
                 .text(function(d) {
-                    return d.cargonominal;
+                    return data.hashCargosNominales[d.cargo_nominal_id].nombre;
                 })
 
             g.append('text')
@@ -39,7 +39,7 @@ function inicializarCargosBloques(data) {
                 .attr('font-size', 8)
                 .attr('class', 'nombre')
                 .text(function(d) {
-                    return d.nombre;
+                    return d.persona.nombre + ' ' + d.persona.apellido;
                 })
 
         })
