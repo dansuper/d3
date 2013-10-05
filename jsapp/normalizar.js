@@ -22,7 +22,7 @@ function normalizarDatos(data) {
         cargo.persona = data.hashPersonas[cargo.persona_id];
         cargo.nominal = data.hashCargosNominales[cargo.cargo_nominal_id];
         cargo.partido = data.hashPartidos[cargo.partido_id];
-        cargo.territorio = data.hashPartidos[cargo.territorio_id];
+        cargo.territorio = data.hashTerritorios[cargo.territorio_id];
     });
 
 

@@ -47,19 +47,19 @@ function mostrarPorCargo(data, ejes, groups, filtro) {
 
 function inicializarDataEjesCargos(data, ejes, ejesCargoData) {
 
-    _.each(data, function(d) {
+    _.each(data.cargos, function(d) {
 
-        ejesCargoData.eje1[d.cargonominal] = {
+        ejesCargoData.eje1[d.cargo_nominal_id] = {
             altura: 0,
-            nombre: d.cargonominal,
+            nombre: d.nominal.nombre,
             display: false
         };
 
-        ejesCargoData.eje2[d.cargonominal + ' | ' + d.territorio] = {
+        ejesCargoData.eje2[d.cargo_nominal_id + ' | ' + d.territorio_id] = {
             altura: 0,
-            nombre: d.territorio,
+            nombre: d.territorio.nombre,
             display: false,
-            parentEje: ejesCargoData.eje1[d.cargonominal]
+            parentEje: ejesCargoData.eje1[d.cargo_nominal_id]
         };
 
     });
@@ -129,14 +129,14 @@ function ordenamientoPorCargo(data, filtro) {
     });
 
     //Reset todas las alturas de los cargos
-    _.each(data, function(item) {
+    _.each(data.cargos, function(item) {
         item.__layout.cargo = {
             display: filtrarCargo(item, filtro),
             altura: 0
         };
     });
 
-    var filteredData = _.filter(data, function(item) {
+    var filteredData = _.filter(data.cargos, function(item) {
         return item.__layout.cargo.display;
     });
 
@@ -148,14 +148,14 @@ function ordenamientoPorCargo(data, filtro) {
         _.map(
             _.groupBy(filteredData,
                 function(cargo) {
-                    return cargo.cargonominal + ' | ' + cargo.territorio;
+                    return cargo.cargo_nominal_id + ' | ' + cargo.territorio_id;
                 }), function(el, key) {
                 return {
                     nombre: key,
                     cargos: el
                 }
             }), 'nombre');
-
+    
     _.each(agrupado, function(item) {
 
         var cargonominal = item.nombre;
@@ -187,13 +187,13 @@ function ordenamientoPorCargo(data, filtro) {
             cargo.__layout.cargo.altura = alturaCargoNominal + cargo.altura; //Este es el offset Y total
 
             //Altura del label del eje2
-            var keyEje2 = cargo.cargonominal + ' | ' + cargo.territorio;
+            var keyEje2 = cargo.cargo_nominal_id + ' | ' + cargo.territorio_id;
             if (!ejesCargoData.eje2[keyEje2].display) {
                 ejesCargoData.eje2[keyEje2].display = true;
                 ejesCargoData.eje2[keyEje2].altura = cargo.__layout.cargo.altura;
-                if (!ejesCargoData.eje1[cargo.cargonominal].display) {
-                    ejesCargoData.eje1[cargo.cargonominal].display = true;
-                    ejesCargoData.eje1[cargo.cargonominal].altura = cargo.__layout.cargo.altura;
+                if (!ejesCargoData.eje1[cargo.cargo_nominal_id].display) {
+                    ejesCargoData.eje1[cargo.cargo_nominal_id].display = true;
+                    ejesCargoData.eje1[cargo.cargo_nominal_id].altura = cargo.__layout.cargo.altura;
                 }
             }
 

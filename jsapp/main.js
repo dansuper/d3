@@ -54,7 +54,7 @@ inicializarDataEjesCargos(data, ejes, ejesCargoData);
 tipoGrafico = "nombre"; // posibles valores: ['nombre', 'cargo']
 
 filtro = {
-    personas : {}
+    personas : null
 };
 
 inicializarCurvas(data);
@@ -81,7 +81,10 @@ filtroInput.on('keyup', _.debounce(function() {
         return false;
     });
 
-    filtro.personas = _.reduce(personasQueVan, function(memo, p){ memo[p.id] = p; }, {});
+    filtro.personas = personasQueVan.length ? 
+        _.reduce(personasQueVan, function(memo, p){ memo[p.id] = p; return memo; }, {}) : 
+        null;
+    console.log(filtro.personas)
 
     layout(data, ejes, groups, tipoGrafico, filtro);
 }, 400));

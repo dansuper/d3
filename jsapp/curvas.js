@@ -5,8 +5,8 @@ var ii = 0;
 
 function inicializarCurvas(data) {
 
-    var personas = _.groupBy(data, function(d) {
-        return d.nombre;
+    var personas = _.groupBy(data.cargos, function(d) {
+        return d.persona_id;
     });
 
     _.each(personas, function(d,index) {
