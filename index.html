@@ -24,10 +24,12 @@
 			padding: 5px;
 			font-size: 12px;
 		}
-		#tooltip.legislativo{
+		#tooltip.legislativo,
+		#tooltip.Legislativo{
 			background: #AACAFF;
 		}
-		#tooltip.ejecutivo{
+		#tooltip.ejecutivo,
+		#tooltip.Ejecutivo{
 			background: #FDACB8;
 		}
 		#tooltip .detalles{
@@ -36,10 +38,12 @@
 		#cargos rect{
 			opacity: 0.5;
 		}
-		#cargos rect.legislativo{
+		#cargos rect.legislativo,
+		#cargos rect.Legislativo{
 			fill: #00f;
 		}
-		#cargos rect.ejecutivo{
+		#cargos rect.ejecutivo,
+		#cargos rect.Ejecutivo{
 			fill: #f00;
 		}
 		#cargos text{
@@ -94,7 +98,7 @@
 
 	<script id="tooltipTemplate" type="text/template">
 		<b><%- persona.nombre + ' ' + persona.apellido %></b><br>
-		<%- nominal.nombre %><br> 
+		<%- nominal.tipo %><br> 
 		<span class="detalles">
 			<%- fechainicioyear %> - <%- fechafinyear %><br>
 			<%- territorio %>

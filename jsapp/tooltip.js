@@ -7,7 +7,7 @@ function initTooltip() {
 
 function showTooltip(d) {
     tooltipEl.html(tooltipTemplate(d));
-    tooltipEl.attr('class', d.cargotipo).style('display', 'block');
+    tooltipEl.attr('class', d.nominal.tipo).style('display', 'block');
 }
 
 function hideTooltip() {

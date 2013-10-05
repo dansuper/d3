@@ -21,7 +21,7 @@ function inicializarCargosBloques(data) {
                 .attr('width', xScale(d.fechafinyear) - xScale(d.fechainicioyear) - 2)
                 .attr('height', ALTO_BLOQUES - 4)
                 .attr('class', function(d) {
-                    return d.cargotipo;
+                    return d.nominal.tipo;
                 })
 
             g.append('text')
@@ -30,7 +30,7 @@ function inicializarCargosBloques(data) {
                 .attr('font-size', 8)
                 .attr('class', 'cargo')
                 .text(function(d) {
-                    return data.hashCargosNominales[d.cargo_nominal_id].nombre;
+                    return d.nominal.nombre;
                 })
 
             g.append('text')

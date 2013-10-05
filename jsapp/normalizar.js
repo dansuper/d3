@@ -8,6 +8,7 @@
 
 function normalizarDatos(data) {
     // en realidad, desnormaliza los datos.
+    //data.cargos = data.cargos.slice(0,100);
 
     data.hashPersonas = _.reduce(data.personas, function(memo, p){ memo[p.id]= p; return memo; },{});
     data.hashCargosNominales = _.reduce(data.cargosnominales, function(memo, p){ memo[p.id]= p; return memo; },{});
