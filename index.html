@@ -116,7 +116,7 @@
 		<div id="tooltip"></div>
 	</script>
 
-	<script src="http://cargografias.org/cargosdataendpoint3.php"></script>
+	<!-- script src="http://cargografias.org/cargosdataendpoint3.php"></script -->
 	<script src="jsapp/normalizar.js"></script>
 	<script src="jsapp/tooltip.js"></script>
 	<script src="jsapp/cargosBloques.js"></script>
@@ -127,7 +127,32 @@
 	<script src="jsapp/filtrarCargo.js"></script>
 	<script src="jsapp/layout.js"></script>
 	<script src="jsapp/curvas.js"></script>
-	<script src="jsapp/main.js"></script>
+	<!-- script src="jsapp/main.js"></script -->
+	<script src="jsapp/CargografiasTimeline.js"></script>
+
+	<script>
+
+		var cargoTimeline = new CargografiasTimeline({
+			containerEl : document.getElementById('svgContainer'), 
+			filtro:{ ids: [1,2,3] }, 
+			mostrarPor : 'nombre'
+		});
+
+	    d3.select('#radAgrupar-persona').on('click', function() {
+	        tipoGrafico = "nombre";
+	        layout(data, ejes, groups, tipoGrafico, filtro);
+	    });
+
+	    d3.select('#radAgrupar-cargo').on('click', function() {
+	        tipoGrafico = "cargo";
+	        layout(data, ejes, groups, tipoGrafico, filtro);
+	    });
+
+
+
+
+
+	</script>
 
 </body>
 </html>

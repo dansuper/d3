@@ -73,7 +73,7 @@ function mostrarPorNombre(data, ejes, groups, filtro) {
     });
 
     updateEjePersonas(ejes, personasToAltura);
-
+    ejes.alturaMaxPersonas = acumH;
     groups
         .transition()
         .duration(TRANSITION_DURATION)

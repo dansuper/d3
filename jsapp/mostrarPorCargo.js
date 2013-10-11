@@ -2,7 +2,8 @@ function mostrarPorCargo(data, ejes, groups, filtro) {
 
     activarEjeCargos();
 
-    ordenamientoPorCargo(data, filtro)
+    var res = ordenamientoPorCargo(data, filtro)
+    console.log(res)
 
     groups
         .transition()
@@ -175,7 +176,9 @@ function ordenamientoPorCargo(data, filtro) {
                 colision = false;
                 cargo.altura += 1;
                 _.each(procesados, function(cargoProcesado) {
-                    if (cargoProcesado.altura == cargo.altura && cargoProcesado.fechainicioyear < cargo.fechafinyear && cargoProcesado.fechafinyear > cargo.fechainicioyear) {
+                    if (cargoProcesado.altura == cargo.altura 
+                        && cargoProcesado.fechainicioyear < cargo.fechafinyear 
+                        && cargoProcesado.fechafinyear > cargo.fechainicioyear) {
                         colision = true;
                     }
                 });

@@ -1,7 +1,6 @@
 function crearEjeAnios(data, svg, xScale) {
 
     var anios = getAniosMasUsados(data, 10);
-    console.log(anios)
     anios.push(primerStartingYear, ultimoEndingYear);
     anios.push(1976, 1983);
 

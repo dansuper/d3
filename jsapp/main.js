@@ -84,7 +84,6 @@ filtroInput.on('keyup', _.debounce(function() {
     filtro.personas = personasQueVan.length ? 
         _.reduce(personasQueVan, function(memo, p){ memo[p.id] = p; return memo; }, {}) : 
         null;
-    console.log(filtro.personas)
 
     layout(data, ejes, groups, tipoGrafico, filtro);
 }, 400));
