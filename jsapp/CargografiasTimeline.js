@@ -32,7 +32,7 @@
     var data = normalizarDatos(__cargos_data);
 
     CHART_HEIGHT = ALTO_BLOQUES * _.size(_.groupBy(data.cargos, function(d) {
-      return d.persona_id
+      return d.persona_id;
     })) + 50;
 
     resetSVGCanvas();
@@ -80,18 +80,17 @@
 
       tipoGrafico = options.mostrarPor || 'nombre';
 
-      var idsPorNombre;
+      var idsPorNombre, nombres, intersection;
 
       if (options.filtro) {
 
         if (options.filtro.nombres) {
 
-          var nombres;
 
           nombres = _.filter(_.map(options.filtro.nombres.toLowerCase().split(','), function(v) {
-            return v.trim()
+            return v.trim();
           }), function(v) {
-            return v !== ""
+            return v !== "";
           });
 
           idsPorNombre = _.map(_.filter(data.personas, function(p) {
@@ -109,7 +108,7 @@
         }
 
         if (options.filtro.idPersonas && idsPorNombre) {
-          var intersection = _.intersection(options.filtro.idPersonas, idsPorNombre);
+          intersection = _.intersection(options.filtro.idPersonas, idsPorNombre);
         }
 
         if ((options.filtro.idPersonas && options.filtro.idPersonas.length) ||
@@ -123,7 +122,8 @@
       }
 
       layout(data, ejes, groups, tipoGrafico, filtro);
-    }
+    
+    }; // this.update = function(...)...
 
     this.update(options);
 
@@ -185,6 +185,7 @@
       .on("mousemove", mousemove);
 
     function mousemove() {
+      /*jshint validthis:true */
       yearMarker.attr("transform", "translate(" + d3.mouse(this)[0] + ", " + EJE_ANIOS_OFFSET_Y + ")");
     }
 
@@ -204,7 +205,7 @@
             .attr('height', ALTO_BLOQUES - 4)
             .attr('class', function(d) {
               return d.nominal.tipo;
-            })
+            });
 
           g.append('text')
             .attr('y', 10)
@@ -213,7 +214,7 @@
             .attr('class', 'cargo')
             .text(function(d) {
               return d.nominal.nombre;
-            })
+            });
 
           g.append('text')
             .attr('y', 20)
@@ -222,7 +223,7 @@
             .attr('class', 'nombre')
             .text(function(d) {
               return d.persona.nombre + ' ' + d.persona.apellido;
-            })
+            });
 
         })
         .on("mouseover", function(d) {
@@ -277,13 +278,13 @@
 
       activarEjeCargos();
 
-      var res = ordenamientoPorCargo(data, filtro)
+      var res = ordenamientoPorCargo(data, filtro);
 
       groups
         .transition()
         .duration(TRANSITION_DURATION)
         .attr('opacity', function(d) {
-          return d.__layout.cargo.display ? 1 : 0
+          return d.__layout.cargo.display ? 1 : 0;
         })
         .attr('transform', function(d) {
           var x = xScale(d.fechainicioyear);
@@ -295,7 +296,7 @@
         .selectAll('g')
         .transition()
         .attr('opacity', function(d) {
-          return d.display ? 1 : 0
+          return d.display ? 1 : 0;
         })
         .attr('transform', function(d) {
           var x = 0;
@@ -307,7 +308,7 @@
         .selectAll('g')
         .transition()
         .attr('opacity', function(d) {
-          return d.display ? 1 : 0
+          return d.display ? 1 : 0;
         })
         .attr('transform', function(d) {
           var x = 200;
@@ -356,7 +357,7 @@
             .attr('x', 5)
             .text(function(d) {
               return d.nombre;
-            })
+            });
 
           g.append("line")
             .attr("x1", 0)
@@ -383,7 +384,7 @@
             .attr('y', 18)
             .text(function(d) {
               return d.nombre;
-            })
+            });
 
         });
 
@@ -428,7 +429,7 @@
             return {
               nombre: key,
               cargos: el
-            }
+            };
           }), 'nombre');
 
       _.each(agrupado, function(item) {
@@ -444,16 +445,17 @@
         _.each(cargos, function(cargo) {
 
           cargo.altura = -1;
-          var colision;
+          var colision, i;
 
           do {
             colision = false;
             cargo.altura += 1;
-            _.each(procesados, function(cargoProcesado) {
+            for(i=0;i<procesados.length;i++){
+              var cargoProcesado = procesados[i];
               if (cargoProcesado.altura == cargo.altura && cargoProcesado.fechainicioyear < cargo.fechafinyear && cargoProcesado.fechafinyear > cargo.fechainicioyear) {
                 colision = true;
               }
-            });
+            }
           } while (colision);
 
           alturaMax = Math.max(alturaMax, cargo.altura);
@@ -525,9 +527,9 @@
 
       //Acá va el ordenamiento de las personas
       var listaPersonas = _.sortBy(_.map(nombresAMostrar, function(value, key) {
-        return key
+        return key;
       }), function(persona_id) {
-        return data.hashPersonas[persona_id].nombre + ' ' + data.hashPersonas[persona_id].apellido
+        return data.hashPersonas[persona_id].nombre + ' ' + data.hashPersonas[persona_id].apellido;
       });
 
       var cargosAMostrar = _.filter(data.cargos, function(d) {
@@ -553,12 +555,11 @@
           return a.fechainicioyear - b.fechainicioyear;
         });
 
-        var cargo;
+        var cargo = cargos.shift();
         var processedCargos = [];
         var i;
-
-        while (cargo = cargos.shift()) {
-
+        
+        while (cargo) {
           var collision = false;
           for (i = 0; i < processedCargos.length; i++) {
             var cargoProcesado = processedCargos[i];
@@ -572,6 +573,7 @@
           }
           cargo.altura = currentAltura;
           processedCargos.push(cargo);
+          cargo = cargos.shift();
         }
 
         alturasPersona[persona_id] = currentAltura;
@@ -594,7 +596,7 @@
         .transition()
         .duration(TRANSITION_DURATION)
         .attr('opacity', function(d) {
-          return d.__layout.nombre.display ? 1 : 0
+          return d.__layout.nombre.display ? 1 : 0;
         })
         .attr('transform', function(d) {
           var x = xScale(d.fechainicioyear);
@@ -620,7 +622,7 @@
     function inicializarEjeNombre(ejes, ejesInfo) {
 
       var dataEjePersonas = _.sortBy(data.personas, function(p) {
-        return p.nombre + ' ' + p.apellido
+        return p.nombre + ' ' + p.apellido;
       });
 
       ejes.ejePersonas.selectAll('g').data(dataEjePersonas).enter().append('g')
@@ -633,7 +635,7 @@
             .attr('x', 5)
             .text(function(d) {
               return d.nombre + ' ' + d.apellido;
-            })
+            });
 
           g.append("line")
             .attr("x1", 0)
@@ -692,7 +694,7 @@
 
       _.each(personas, function(d, index) {
         var i;
-        var cargosDeLaPersona = _.sortBy(d, 'fechainicioyear')
+        var cargosDeLaPersona = _.sortBy(d, 'fechainicioyear');
 
 
         for (i = 0; i < cargosDeLaPersona.length - 1; i++) {
@@ -744,12 +746,12 @@
 
         })
         .attr('stroke', function(d) {
-          return d.colorStroke
+          return d.colorStroke;
         });
     }
 
     function ocultarCurvas() {
-      curvas.attr('opacity', 0)
+      curvas.attr('opacity', 0);
     }
 
     //================================
@@ -780,11 +782,11 @@
       var toOrder = [];
       var i, count = {};
       var anios = data.cargos.map(function(cargo) {
-        return parseInt(cargo['fechainicioyear'], 10)
+        return parseInt(cargo.fechainicioyear, 10);
       });
 
       anios.concat(data.cargos.map(function(cargo) {
-        return parseInt(cargo['fechafinyear'], 10)
+        return parseInt(cargo.fechafinyear, 10);
       }));
 
       for (i = 0; i < anios.length; i++) {
