@@ -1,0 +1,92 @@
+<!doctype html>
+<head>
+	<meta charset='utf-8'> 
+	<title>d3</title>
+	<style>
+	.allContainer{
+		font-family: Tahoma, Geneva, sans-serif;
+		color: #555;
+	}
+	.filtroContainer span{
+		font-size: 9px;
+		color: #888;
+	}
+	</style>
+	<link rel="stylesheet" href="CargografiasTimeline.css"/>
+	<script src="jslib/d3.v3.js" ></script>
+	<script src="jslib/underscore-min.js" ></script>
+</head>
+<body>
+
+	<div class="allContainer">
+
+		<div>
+			<label>Agrupar:</label> 
+			<input type="radio" id="radAgrupar-persona" name="radAgrupar" value="persona" checked="checked"/>
+			<label for="radAgrupar-persona">por persona</label> 
+			<input type="radio" id="radAgrupar-cargo" name="radAgrupar" value="cargo" />
+			<label for="radAgrupar-cargo">por cargo</label> 
+		</div>
+		<div class="filtroContainer">
+			<label for="filtro">Nombre:</label><input type="text" id="filtro"><span>(varios separados por coma. ej: cris, kunk)</span>
+		</div>
+
+		<div id="svgContainer"></div>
+
+	</div>
+
+	<script src="http://cargografias.org/cargosdataendpoint3.php"></script>
+	<script src="jsapp/CargografiasTimeline.js"></script>
+
+	<script>
+
+	(function(){
+
+		var idPersonas = ["239", "446", "811", "930"];
+		var filtroInput = document.getElementById('filtro');
+
+		var cargoTimeline = new CargografiasTimeline({
+			containerEl : document.getElementById('svgContainer') 
+			//,mostrarPor : 'cargo'
+			//,filtro:{ idPersonas: idPersonas }
+		});
+
+		document.getElementById('radAgrupar-persona').onclick = function(){
+			setTimeout(function(){
+		        cargoTimeline.update({
+		        	mostrarPor: "nombre",
+		        	filtro: { 
+		        		nombres: filtroInput.value
+		      //  		,idPersonas: idPersonas
+					}
+		        });
+			},1);
+		};
+
+		document.getElementById('radAgrupar-cargo').onclick = function(){
+			setTimeout(function(){
+		        cargoTimeline.update({
+		        	mostrarPor: "cargo",
+		        	filtro: { 
+		        		nombres: filtroInput.value
+		        		//,idPersonas: idPersonas
+					}
+		        });
+			},1);
+		};
+
+		filtroInput.onkeyup = _.debounce(function() {
+			cargoTimeline.update({
+	        	filtro: { 
+	        		nombres: filtroInput.value
+		        	//,idPersonas: idPersonas
+				}
+	        });
+	    }, 400);
+
+	})();
+
+	</script>
+
+</body>
+</html>
