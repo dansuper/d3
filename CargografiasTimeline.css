@@ -1,15 +1,9 @@
-.allContainer{
-	font-family: Tahoma, Geneva, sans-serif;
-	color: #555;
-}
-#ejeCargos0,
-#ejeCargos1,
-#ejePersonas{
+.ctl-ejeCargos0,
+.ctl-ejeCargos1,
+.ctl-ejePersonas{
 	font-size: 15px;
 }
-svg{
-}
-#tooltip{
+.ctl-tooltip{
 	position: absolute;
 	display: none;
 	text-align: center;
@@ -19,55 +13,51 @@ svg{
 	padding: 5px;
 	font-size: 12px;
 }
-#tooltip.legislativo,
-#tooltip.Legislativo{
+.ctl-tooltip.ctl-legislativo,
+.ctl-tooltip.ctl-Legislativo{
 	background: #AACAFF;
 }
-#tooltip.ejecutivo,
-#tooltip.Ejecutivo{
+.ctl-tooltip.ctl-ejecutivo,
+.ctl-tooltip.ctl-Ejecutivo{
 	background: #FDACB8;
 }
-#tooltip .detalles{
+.ctl-tooltip .ctl-detalles{
 	font-size: 10px;
 }
-#cargos rect{
+.ctl-cargos rect{
 	opacity: 0.5;
 }
-#cargos rect.legislativo,
-#cargos rect.Legislativo{
+.ctl-cargos rect.ctl-legislativo,
+.ctl-cargos rect.ctl-Legislativo{
 	fill: #00f;
 }
-#cargos rect.ejecutivo,
-#cargos rect.Ejecutivo{
+.ctl-cargos rect.ctl-ejecutivo,
+.ctl-cargos rect.ctl-Ejecutivo{
 	fill: #f00;
 }
-#cargos text{
+.ctl-cargos text{
 	fill: #FFF;
 }
-#cargos text.nombre{
+.ctl-cargos text.ctl-nombre{
 	font-weight: bold;
 }
-#cargos text.cargo{
+.ctl-cargos text.ctl-cargo{
 }
-.axis path,
-.axis line {
-		fill: none;
+.ctl-axis path,
+.ctl-axis line {
+	fill: none;
 	stroke: black;
 	shape-rendering: crispEdges;
 }
-.axis text {
+.ctl-axis text {
 	font-family: sans-serif;
 	font-size: 10px;
 }
-.timeline-label {
+.ctl-timeline-label {
 	font-size: 12px;
 }
-.yearMarker {
+.ctl-yearMarker {
 	fill: none;
 	stroke: #000;
 	stroke-width: 2px;
-}
-#filtroContainer span{
-	font-size: 9px;
-	color: #888;
 }

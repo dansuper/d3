@@ -3,6 +3,24 @@
 
   var thisYear = (new Date()).getFullYear();
 
+  var tooltipTemplate =
+    '<b><%- persona.nombre + " " + persona.apellido %></b><br>' +
+    '<%- nominal.tipo %><br> ' +
+    '<span class="ctl-detalles">' +
+    '<%- fechainicioyear %> - <%- fechafinyear %><br>' +
+    '<%- territorio %>' +
+    '</span>';
+
+  var svgTemplate =
+    '<svg>' +
+    '<g class="ctl-ejeCargos0"></g>' +
+    '<g class="ctl-ejeCargos1"></g>' +
+    '<g class="ctl-ejePersonas"></g>' +
+    '<g class="ctl-cargos"></g>' +
+    '<g class="ctl-curvas"></g>' +
+    '</svg>' +
+    '<div class="ctl-tooltip"></div>';
+
   window.CargografiasTimeline = function(options) {
 
     this.options = options;
@@ -46,9 +64,9 @@
 
     //global ejes
     var ejes = {
-      ejeCargos0: svg.select('#ejeCargos0'),
-      ejeCargos1: svg.select('#ejeCargos1'),
-      ejePersonas: svg.select('#ejePersonas')
+      ejeCargos0: svg.select('.ctl-ejeCargos0'),
+      ejeCargos1: svg.select('.ctl-ejeCargos1'),
+      ejePersonas: svg.select('.ctl-ejePersonas')
     };
 
     inicializarEjeNombre(ejes, data); //Eje por nombre
@@ -122,7 +140,7 @@
       }
 
       layout(data, ejes, groups, tipoGrafico, filtro);
-    
+
     }; // this.update = function(...)...
 
     this.update(options);
@@ -135,7 +153,7 @@
 
     function resetSVGCanvas() {
 
-      options.containerEl.innerHTML = options.baseTemplate;
+      options.containerEl.innerHTML = svgTemplate;
 
       // Inicialización del svg
       svg = d3.select('svg')
@@ -169,7 +187,7 @@
 
     //*** CIRCULITO QUE MARCA EL AÑO CUANDO EL MOUSE SE MUEVE 
     var yearMarker = svg.append("g")
-      .attr("class", "yearMarker")
+      .attr("class", "ctl-yearMarker")
       .style("display", "none");
 
     yearMarker.append("circle")
@@ -191,7 +209,7 @@
 
     function inicializarCargosBloques(data) {
 
-      var cargosBloques = svg.select('#cargos').selectAll('g') //TODO preparar para multiple
+      var cargosBloques = svg.select('.ctl-cargos').selectAll('g') //TODO preparar para multiple
       .data(data.cargos)
         .enter()
         .append('g')
@@ -204,14 +222,14 @@
             .attr('width', Math.max(0, xScale(d.fechafinyear) - xScale(d.fechainicioyear) - 2))
             .attr('height', ALTO_BLOQUES - 4)
             .attr('class', function(d) {
-              return d.nominal.tipo;
+              return 'ctl-' + d.nominal.tipo;
             });
 
           g.append('text')
             .attr('y', 10)
             .attr('x', 2)
             .attr('font-size', 8)
-            .attr('class', 'cargo')
+            .attr('class', 'ctl-cargo')
             .text(function(d) {
               return d.nominal.nombre;
             });
@@ -220,7 +238,7 @@
             .attr('y', 20)
             .attr('x', 2)
             .attr('font-size', 8)
-            .attr('class', 'nombre')
+            .attr('class', 'ctl-nombre')
             .text(function(d) {
               return d.persona.nombre + ' ' + d.persona.apellido;
             });
@@ -249,16 +267,16 @@
       d3.select(el.childNodes[0]).transition().style('opacity', '0.5');
     }
 
-    var tooltipEl, tooltipTemplate;
+    var tooltipEl, tooltipPreparedTemplate;
 
     function initTooltip() {
-      tooltipEl = d3.select('#tooltip');
-      tooltipTemplate = _.template(document.getElementById('tooltipTemplate').innerHTML);
+      tooltipEl = d3.select(options.containerEl).select('.ctl-tooltip');
+      tooltipPreparedTemplate = _.template(tooltipTemplate);
     }
 
     function showTooltip(d) {
-      tooltipEl.html(tooltipTemplate(d));
-      tooltipEl.attr('class', d.nominal.tipo).style('display', 'block');
+      tooltipEl.html(tooltipPreparedTemplate(d));
+      tooltipEl.attr('class', 'ctl-tooltip ctl-' + d.nominal.tipo).style('display', 'block');
     }
 
     function hideTooltip() {
@@ -450,7 +468,7 @@
           do {
             colision = false;
             cargo.altura += 1;
-            for(i=0;i<procesados.length;i++){
+            for (i = 0; i < procesados.length; i++) {
               var cargoProcesado = procesados[i];
               if (cargoProcesado.altura == cargo.altura && cargoProcesado.fechainicioyear < cargo.fechafinyear && cargoProcesado.fechafinyear > cargo.fechainicioyear) {
                 colision = true;
@@ -558,7 +576,7 @@
         var cargo = cargos.shift();
         var processedCargos = [];
         var i;
-        
+
         while (cargo) {
           var collision = false;
           for (i = 0; i < processedCargos.length; i++) {
@@ -707,7 +725,7 @@
 
       });
 
-      curvas = svg.select('#curvas')
+      curvas = svg.select('.ctl-curvas')
         .selectAll('path')
         .data(curvasData)
         .enter()
@@ -844,7 +862,7 @@
       partidos: copyArr(origData.partidos),
       territorios: copyArr(origData.territorios),
       cargos: copyArr(_.filter(origData.cargos, function(c) {
-        return parseInt(c.fechainicio,10) > 1970;
+        return parseInt(c.fechainicio, 10) > 1970;
       })),
     };
     //data.cargos = data.cargos.slice(0,500);
