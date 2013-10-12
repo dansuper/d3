@@ -1,0 +1,73 @@
+.allContainer{
+	font-family: Tahoma, Geneva, sans-serif;
+	color: #555;
+}
+#ejeCargos0,
+#ejeCargos1,
+#ejePersonas{
+	font-size: 15px;
+}
+svg{
+}
+#tooltip{
+	position: absolute;
+	display: none;
+	text-align: center;
+	background: black;
+	opacity: 0.9;
+	border-radius: 4px;
+	padding: 5px;
+	font-size: 12px;
+}
+#tooltip.legislativo,
+#tooltip.Legislativo{
+	background: #AACAFF;
+}
+#tooltip.ejecutivo,
+#tooltip.Ejecutivo{
+	background: #FDACB8;
+}
+#tooltip .detalles{
+	font-size: 10px;
+}
+#cargos rect{
+	opacity: 0.5;
+}
+#cargos rect.legislativo,
+#cargos rect.Legislativo{
+	fill: #00f;
+}
+#cargos rect.ejecutivo,
+#cargos rect.Ejecutivo{
+	fill: #f00;
+}
+#cargos text{
+	fill: #FFF;
+}
+#cargos text.nombre{
+	font-weight: bold;
+}
+#cargos text.cargo{
+}
+.axis path,
+.axis line {
+		fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+.axis text {
+	font-family: sans-serif;
+	font-size: 10px;
+}
+.timeline-label {
+	font-size: 12px;
+}
+.yearMarker {
+	fill: none;
+	stroke: #000;
+	stroke-width: 2px;
+}
+#filtroContainer span{
+	font-size: 9px;
+	color: #888;
+}
