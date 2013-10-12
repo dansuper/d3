@@ -2,81 +2,7 @@
 <head>
 	<meta charset='utf-8'> 
 	<title>d3</title>
-	<style>
-		.allContainer{
-			font-family: Tahoma, Geneva, sans-serif;
-			color: #555;
-		}
-		#ejeCargos0,
-		#ejeCargos1,
-		#ejePersonas{
-			font-size: 15px;
-		}
-		svg{
-		}
-		#tooltip{
-			position: absolute;
-			display: none;
-			text-align: center;
-			background: black;
-			opacity: 0.9;
-			border-radius: 4px;
-			padding: 5px;
-			font-size: 12px;
-		}
-		#tooltip.legislativo,
-		#tooltip.Legislativo{
-			background: #AACAFF;
-		}
-		#tooltip.ejecutivo,
-		#tooltip.Ejecutivo{
-			background: #FDACB8;
-		}
-		#tooltip .detalles{
-			font-size: 10px;
-		}
-		#cargos rect{
-			opacity: 0.5;
-		}
-		#cargos rect.legislativo,
-		#cargos rect.Legislativo{
-			fill: #00f;
-		}
-		#cargos rect.ejecutivo,
-		#cargos rect.Ejecutivo{
-			fill: #f00;
-		}
-		#cargos text{
-			fill: #FFF;
-		}
-		#cargos text.nombre{
-			font-weight: bold;
-		}
-		#cargos text.cargo{
-		}
-		.axis path,
-		.axis line {
-      		fill: none;
-			stroke: black;
-			shape-rendering: crispEdges;
-		}
-		.axis text {
-			font-family: sans-serif;
-			font-size: 10px;
-		}
-		.timeline-label {
-			font-size: 12px;
-		}
-		.yearMarker {
-			fill: none;
-			stroke: #000;
-			stroke-width: 2px;
-		}
-		#filtroContainer span{
-			font-size: 9px;
-			color: #888;
-		}
-	</style>
+	<link rel="stylesheet" href="CargografiasTimeline.css"/>
 	<script src="jslib/d3.v3.js" ></script>
 	<script src="jslib/underscore-min.js" ></script>
 </head>
@@ -117,40 +43,57 @@
 	</script>
 
 	<!-- script src="http://cargografias.org/cargosdataendpoint3.php"></script -->
-	<script src="jsapp/normalizar.js"></script>
-	<script src="jsapp/tooltip.js"></script>
-	<script src="jsapp/cargosBloques.js"></script>
-	<script src="jsapp/ejes.js"></script>
-	<script src="jsapp/ejeAnios.js"></script>
-	<script src="jsapp/mostrarPorNombre.js"></script>
-	<script src="jsapp/mostrarPorCargo.js"></script>
-	<script src="jsapp/filtrarCargo.js"></script>
-	<script src="jsapp/layout.js"></script>
-	<script src="jsapp/curvas.js"></script>
-	<!-- script src="jsapp/main.js"></script -->
+	<script src="data.js"></script>
 	<script src="jsapp/CargografiasTimeline.js"></script>
 
 	<script>
 
+	(function(){
+
+		var idPersonas = ["239", "446", "811", "930"];
+		var filtroInput = document.getElementById('filtro');
+
 		var cargoTimeline = new CargografiasTimeline({
 			containerEl : document.getElementById('svgContainer'), 
-			filtro:{ ids: [1,2,3] }, 
-			mostrarPor : 'nombre'
+			mostrarPor : 'cargo',
+			baseTemplate: document.getElementById('svgTemplate').innerHTML,
+			filtro:{ idPersonas: idPersonas }
 		});
 
-	    d3.select('#radAgrupar-persona').on('click', function() {
-	        tipoGrafico = "nombre";
-	        layout(data, ejes, groups, tipoGrafico, filtro);
-	    });
+		document.getElementById('radAgrupar-persona').onclick = function(){
+			setTimeout(function(){
+		        cargoTimeline.update({
+		        	mostrarPor: "nombre",
+		        	filtro: { 
+		        		nombres: filtroInput.value, 
+		        		idPersonas: idPersonas
+					}
+		        });
+			},1);
+		};
 
-	    d3.select('#radAgrupar-cargo').on('click', function() {
-	        tipoGrafico = "cargo";
-	        layout(data, ejes, groups, tipoGrafico, filtro);
-	    });
+		document.getElementById('radAgrupar-cargo').onclick = function(){
+			setTimeout(function(){
+		        cargoTimeline.update({
+		        	mostrarPor: "cargo",
+		        	filtro: { 
+		        		nombres: filtroInput.value, 
+		        		idPersonas: idPersonas
+					}
+		        });
+			},1);
+		};
 
+		filtroInput.onkeyup = _.debounce(function() {
+			cargoTimeline.update({
+	        	filtro: { 
+	        		nombres: filtroInput.value, 
+		        	idPersonas: idPersonas
+				}
+	        });
+	    }, 400);
 
-
-
+	})();
 
 	</script>
 
