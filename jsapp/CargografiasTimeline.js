@@ -8,7 +8,7 @@
     '<%- nominal.tipo %><br> ' +
     '<span class="ctl-detalles">' +
     '<%- fechainicioyear %> - <%- fechafinyear %><br>' +
-    '<%- territorio %>' +
+    '<%- territorio.nombre %>' +
     '</span>';
 
   var svgTemplate =
