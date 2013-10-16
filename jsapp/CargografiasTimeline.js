@@ -1,4 +1,4 @@
-(function(document, window, d3, _) {
+(function(document, window, d3, _, $) {
   "use strict";
 
   var thisYear = (new Date()).getFullYear();
@@ -26,8 +26,8 @@
     this.options = options;
 
     // "Constantes"
-    var CHART_WIDTH = 1300;
-    var CHART_HEIGHT = 4800; //Not a constant anymore, hay que renombrar
+    var CHART_WIDTH = $(options.containerEl).width() - 20 ;
+    var CHART_HEIGHT = 0; //Not a constant anymore, hay que renombrar
 
     var PIXELS_PER_YEAR = 20;
     var ALTO_BLOQUES = 30; //Alto de los bloques
@@ -152,7 +152,6 @@
     crearEjeAnios(data, svg, xScale);
 
     function resetSVGCanvas() {
-
       options.containerEl.innerHTML = svgTemplate;
 
       // Inicialización del svg
@@ -679,7 +678,6 @@
         mostrarPorCargo(data, ejes, groups, filtro);
         altura = ejes.alturaMaxEjeCargo * ALTO_BLOQUES + 100;
       }
-
       //Setear la altura
       svg = d3.select('svg').attr("height", altura);
 
@@ -901,4 +899,4 @@
     return newArr;
   }
 
-})(document, window, d3, _);
+})(document, window, d3, _, jQuery);
