@@ -36,7 +36,7 @@
     var OFFSET_Y = 40; // USado para mover verticalmente los  blques y el eje vertical
     var EJE_ANIOS_OFFSET_Y = 8;
 
-    var ALTURA_OCULTAMIENTO = CHART_HEIGHT; // Los elementos se van a mover acá cuando no se muestren
+    var ALTURA_OCULTAMIENTO = -100; // Los elementos se van a mover acá cuando no se muestren
 
 
     var mostrandoPor = "nombre";
@@ -296,7 +296,7 @@
 
       activarEjeCargos();
 
-      var res = ordenamientoPorCargo(data, filtro);
+      ejes.alturaMaxEjeCargo = ordenamientoPorCargo(data, filtro);
 
       groups
         .transition()
@@ -411,6 +411,8 @@
 
     function ordenamientoPorCargo(data, filtro) {
 
+      var alturaMaxReturn = 0;
+
       //Reset las alturas de los ejes
       _.each(ejesCargoData.eje1, function(d) {
         d.altura = 0;
@@ -434,7 +436,6 @@
         return item.__layout.cargo.display;
       });
 
-      var returnData = [];
       var alturaCargoNominal = 0;
 
       //Agrupar por cargo nominal
@@ -456,7 +457,6 @@
         var cargos = item.cargos;
 
         var procesados = [];
-        var alturaMax = 0;
 
         ordenarPorNombreyFechaInicioYear(cargos);
 
@@ -476,7 +476,6 @@
             }
           } while (colision);
 
-          alturaMax = Math.max(alturaMax, cargo.altura);
           procesados.push(cargo);
 
           cargo.__layout.cargo.altura = alturaCargoNominal + cargo.altura; //Este es el offset Y total
@@ -486,6 +485,7 @@
           if (!ejesCargoData.eje2[keyEje2].display) {
             ejesCargoData.eje2[keyEje2].display = true;
             ejesCargoData.eje2[keyEje2].altura = cargo.__layout.cargo.altura;
+            alturaMaxReturn = cargo.__layout.cargo.altura;
             if (!ejesCargoData.eje1[cargo.cargo_nominal_id].display) {
               ejesCargoData.eje1[cargo.cargo_nominal_id].display = true;
               ejesCargoData.eje1[cargo.cargo_nominal_id].altura = cargo.__layout.cargo.altura;
@@ -496,15 +496,9 @@
 
         alturaCargoNominal++;
 
-        returnData.push({
-          nombre: cargonominal,
-          cargos: cargos,
-          altura: alturaMax
-        });
-
       });
 
-      return returnData;
+      return alturaMaxReturn;
     }
 
     function strCmp(s1, s2) {
@@ -683,6 +677,7 @@
       } else {
         //Tipo Gráfico: "cargo"
         mostrarPorCargo(data, ejes, groups, filtro);
+        altura = ejes.alturaMaxEjeCargo * ALTO_BLOQUES + 100;
       }
 
       //Setear la altura
