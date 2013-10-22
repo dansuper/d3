@@ -58,7 +58,7 @@
     var xScale = buildxScale(data);
 
     // Esto inicializa los rectángulos que representan a los cargos
-    var groups = inicializarCargosBloques(data);
+    var groupsCargo = inicializarCargosBloques(data);
 
     initTooltip();
 
@@ -139,7 +139,7 @@
 
       }
 
-      layout(data, ejes, groups, tipoGrafico, filtro);
+      layout(data, ejes, groupsCargo, tipoGrafico, filtro);
 
     }; // this.update = function(...)...
 
@@ -208,41 +208,9 @@
 
     function inicializarCargosBloques(data) {
 
-      var cargosBloques = svg.select('.ctl-cargos').selectAll('g') //TODO preparar para multiple
-      .data(data.cargos)
-        .enter()
-        .append('g')
-        .attr('opacity', 0)
-        .each(function(d) {
+      var cargosContainer = svg.select('.ctl-cargos');
 
-          var g = d3.select(this);
-
-          g.append('rect')
-            .attr('width', Math.max(0, xScale(d.fechafinyear) - xScale(d.fechainicioyear) - 2))
-            .attr('height', ALTO_BLOQUES - 4)
-            .attr('class', function(d) {
-              return 'ctl-' + d.nominal.tipo;
-            });
-
-          g.append('text')
-            .attr('y', 10)
-            .attr('x', 2)
-            .attr('font-size', 8)
-            .attr('class', 'ctl-cargo')
-            .text(function(d) {
-              return d.nominal.nombre;
-            });
-
-          g.append('text')
-            .attr('y', 20)
-            .attr('x', 2)
-            .attr('font-size', 8)
-            .attr('class', 'ctl-nombre')
-            .text(function(d) {
-              return d.persona.nombre + ' ' + d.persona.apellido;
-            });
-
-        })
+      cargosContainer.selectAll('g') //TODO preparar para multiple
         .on("mouseover", function(d) {
           showTooltip(d);
           highlight(this);
@@ -255,7 +223,7 @@
           moveTooltip(d3.event);
         });
 
-      return cargosBloques;
+      return cargosContainer;
     }
 
     function highlight(el) {
@@ -297,7 +265,7 @@
 
       ejes.alturaMaxEjeCargo = ordenamientoPorCargo(data, filtro);
 
-      groups
+      groups.selectAll('g')
         .transition()
         .duration(TRANSITION_DURATION)
         .attr('opacity', function(d) {
@@ -339,7 +307,7 @@
 
 
     function inicializarDataEjesCargos(data, ejes, ejesCargoData) {
-
+      return;
       _.each(data.cargos, function(d) {
 
         ejesCargoData.eje1[d.cargo_nominal_id] = {
@@ -547,6 +515,8 @@
         return d.__layout.nombre.display;
       });
 
+      updateBloques(cargosAMostrar);
+
       var cargosPorPersonas = _.groupBy(cargosAMostrar, function(c) {
         return c.persona_id;
       });
@@ -603,15 +573,15 @@
 
       updateEjePersonas(ejes, personasToAltura);
       ejes.alturaMaxPersonas = acumH;
-      groups
+      
+      groupsCargo.selectAll('g')
         .transition()
         .duration(TRANSITION_DURATION)
-        .attr('opacity', function(d) {
-          return d.__layout.nombre.display ? 1 : 0;
-        })
+        .attr('opacity',1)
         .attr('transform', function(d) {
           var x = xScale(d.fechainicioyear);
-          var y = d.__layout.nombre.display ? ((personasToAltura[d.persona_id] + d.altura) * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
+          var y = ((personasToAltura[d.persona_id] + d.altura) * ALTO_BLOQUES || 0) + OFFSET_Y;
+          //var y = d.__layout.nombre.display ? ((personasToAltura[d.persona_id] + d.altura) * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
           return 'translate(' + x + ',' + y + ')';
         });
 
@@ -632,6 +602,7 @@
 
     function inicializarEjeNombre(ejes, ejesInfo) {
 
+      return;
       var dataEjePersonas = _.sortBy(data.personas, function(p) {
         return p.nombre + ' ' + p.apellido;
       });
@@ -661,6 +632,48 @@
 
     }
 
+    function updateBloques(filteredCargos){
+
+      var theRef = groupsCargo.selectAll('g').data(filteredCargos, function(d) { return d.id; });
+
+      //Remove old nodes
+      theRef.exit().remove();
+
+      //Add new nodes
+      theRef.enter()
+        .append('g')
+        .attr('opacity', 0)
+        .each(function(d) {
+          
+          var g = d3.select(this);
+
+          g.append('rect')
+            .attr('width', Math.max(0, xScale(d.fechafinyear) - xScale(d.fechainicioyear) - 2))
+            .attr('height', ALTO_BLOQUES - 4)
+            .attr('class', function(d) {
+              return 'ctl-' + d.nominal.tipo;
+            });
+
+          g.append('text')
+            .attr('y', 10)
+            .attr('x', 2)
+            .attr('font-size', 8)
+            .attr('class', 'ctl-cargo')
+            .text(function(d) {
+              return d.nominal.nombre;
+            });
+
+          g.append('text')
+            .attr('y', 20)
+            .attr('x', 2)
+            .attr('font-size', 8)
+            .attr('class', 'ctl-nombre')
+            .text(function(d) {
+              return d.persona.nombre + ' ' + d.persona.apellido;
+            });
+
+        });
+    }
 
     //================================
     // Layout
@@ -685,11 +698,10 @@
 
 
     function filtrarCargo(cargo, filtro) {
-      var i;
-      if (filtro.personas) {
+      if(filtro.personas){
         return !!filtro.personas[cargo.persona_id];
-      } else {
-        return true;
+      }else{
+        return false;
       }
     }
 
