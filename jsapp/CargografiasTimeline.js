@@ -207,7 +207,7 @@
 
       var cargosContainer = svg.select('.ctl-cargos');
 
-      svg[0][0].addEventListener('mouseover', function(e) {
+      cargosContainer[0][0].addEventListener('mouseover', function(e) {
         // do nothing if the target does not have the class drawnLine
         if (e.target.nodeName != "rect" && e.target.nodeName !="text") return;
         var d = d3.select(e.target.parentNode).datum();
@@ -215,7 +215,7 @@
         highlight(e.target.parentNode);
       });
 
-      svg[0][0].addEventListener('mouseout', function(e) {
+      cargosContainer[0][0].addEventListener('mouseout', function(e) {
         // do nothing if the target does not have the class drawnLine
         if (e.target.nodeName != "rect" && e.target.nodeName !="text") return;
         var d = d3.select(e.target.parentNode).datum();
@@ -223,7 +223,7 @@
         unhighlight(e.target.parentNode);
       });
 
-      svg[0][0].addEventListener('mousemove', function(e) {
+      cargosContainer[0][0].addEventListener('mousemove', function(e) {
         // do nothing if the target does not have the class drawnLine
         if (e.target.nodeName != "rect" && e.target.nodeName !="text") return;
         moveTooltip(e);
