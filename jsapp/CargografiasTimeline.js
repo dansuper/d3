@@ -68,8 +68,6 @@
       ejePersonas: svg.select('.ctl-ejePersonas')
     };
 
-    inicializarEjeNombre(ejes, data); //Eje por nombre
-
     var ejesCargoData = {
       eje1: {},
       eje2: {}
@@ -570,7 +568,42 @@
         acumH += (1 + alturasPersona[persona_id]);
       });
 
-      updateEjePersonas(ejes, personasToAltura);
+      //updateEjePersonas(ejes, personasToAltura);
+
+      // listaPersonas
+
+      var itemsEje = ejes.ejePersonas.selectAll('g').data(listaPersonas, function(d){return d});
+
+      itemsEje.enter().append('g')
+        .each(function(d, ix) {
+
+          var g = d3.select(this);
+
+          g.append('text')
+            .attr('y', 18)
+            .attr('x', 5)
+            .text(function(d) {
+              return data.hashPersonas[d].nombre + ' ' + data.hashPersonas[d].apellido;
+            });
+
+          g.append("line")
+            .attr("x1", 0)
+            .attr("y1", -2)
+            .attr("x2", CHART_WIDTH)
+            .attr("y2", -2)
+            .attr("stroke", "#CCC");
+        });
+
+      itemsEje.exit().remove();
+
+      ejes.ejePersonas.selectAll('g')
+        .attr('transform', function(d) {
+          var x = 0;
+          var y = personasToAltura[d] !== undefined ? (personasToAltura[d] * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
+          return 'translate(' + x + ',' + y + ')';
+        })
+        .attr('opacity', 1);
+      
       ejes.alturaMaxPersonas = acumH;
       
       groupsCargo.selectAll('g')
@@ -585,49 +618,6 @@
         });
 
       ocultarCurvas();
-    }
-
-    function updateEjePersonas(ejes, personasToAltura) {
-      ejes.ejePersonas.selectAll('g')
-        .attr('transform', function(d) {
-          var x = 0;
-          var y = personasToAltura[d.id] !== undefined ? (personasToAltura[d.id] * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
-          return 'translate(' + x + ',' + y + ')';
-        })
-        .attr('opacity', function(d) {
-          return personasToAltura[d.id] !== undefined ? 1 : 0;
-        });
-    }
-
-    function inicializarEjeNombre(ejes, ejesInfo) {
-
-      var dataEjePersonas = _.sortBy(data.personas, function(p) {
-        return p.nombre + ' ' + p.apellido;
-      });
-
-      ejes.ejePersonas.selectAll('g').data(dataEjePersonas).enter().append('g')
-        .each(function(d, ix) {
-
-          var g = d3.select(this);
-
-          g.append('text')
-            .attr('y', 18)
-            .attr('x', 5)
-            .text(function(d) {
-              return d.nombre + ' ' + d.apellido;
-            });
-
-          g.append("line")
-            .attr("x1", 0)
-            .attr("y1", -2)
-            .attr("x2", CHART_WIDTH)
-            .attr("y2", -2)
-            .attr("stroke", "#CCC");
-
-        })
-
-      ;
-
     }
 
     function updateBloques(filteredCargos){
