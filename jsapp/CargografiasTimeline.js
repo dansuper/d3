@@ -38,7 +38,6 @@
 
     var ALTURA_OCULTAMIENTO = -100; // Los elementos se van a mover acá cuando no se muestren
 
-
     var mostrandoPor = "nombre";
 
     var svg;
@@ -268,12 +267,10 @@
       groups.selectAll('g')
         .transition()
         .duration(TRANSITION_DURATION)
-        .attr('opacity', function(d) {
-          return d.__layout.cargo.display ? 1 : 0;
-        })
+        .attr('opacity', 1)
         .attr('transform', function(d) {
           var x = xScale(d.fechainicioyear);
-          var y = d.__layout.cargo.display ? (d.__layout.cargo.altura * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
+          var y = (d.__layout.cargo.altura * ALTO_BLOQUES || 0) + OFFSET_Y;
           return 'translate(' + x + ',' + y + ')';
         });
 
@@ -307,7 +304,7 @@
 
 
     function inicializarDataEjesCargos(data, ejes, ejesCargoData) {
-      return;
+
       _.each(data.cargos, function(d) {
 
         ejesCargoData.eje1[d.cargo_nominal_id] = {
@@ -402,6 +399,8 @@
       var filteredData = _.filter(data.cargos, function(item) {
         return item.__layout.cargo.display;
       });
+
+      updateBloques(filteredData);
 
       var alturaCargoNominal = 0;
 
@@ -602,7 +601,6 @@
 
     function inicializarEjeNombre(ejes, ejesInfo) {
 
-      return;
       var dataEjePersonas = _.sortBy(data.personas, function(p) {
         return p.nombre + ' ' + p.apellido;
       });
