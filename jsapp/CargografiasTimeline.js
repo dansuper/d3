@@ -207,18 +207,27 @@
 
       var cargosContainer = svg.select('.ctl-cargos');
 
-      cargosContainer.selectAll('g') //TODO preparar para multiple
-        .on("mouseover", function(d) {
-          showTooltip(d);
-          highlight(this);
-        })
-        .on("mouseout", function(d) {
-          hideTooltip();
-          unhighlight(this);
-        })
-        .on("mousemove", function(d) {
-          moveTooltip(d3.event);
-        });
+      svg[0][0].addEventListener('mouseover', function(e) {
+        // do nothing if the target does not have the class drawnLine
+        if (e.target.nodeName != "rect" && e.target.nodeName !="text") return;
+        var d = d3.select(e.target.parentNode).datum();
+        showTooltip(d);
+        highlight(e.target.parentNode);
+      });
+
+      svg[0][0].addEventListener('mouseout', function(e) {
+        // do nothing if the target does not have the class drawnLine
+        if (e.target.nodeName != "rect" && e.target.nodeName !="text") return;
+        var d = d3.select(e.target.parentNode).datum();
+        hideTooltip();
+        unhighlight(e.target.parentNode);
+      });
+
+      svg[0][0].addEventListener('mousemove', function(e) {
+        // do nothing if the target does not have the class drawnLine
+        if (e.target.nodeName != "rect" && e.target.nodeName !="text") return;
+        moveTooltip(e);
+      });
 
       return cargosContainer;
     }
@@ -613,7 +622,6 @@
         .attr('transform', function(d) {
           var x = xScale(d.fechainicioyear);
           var y = ((personasToAltura[d.persona_id] + d.altura) * ALTO_BLOQUES || 0) + OFFSET_Y;
-          //var y = d.__layout.nombre.display ? ((personasToAltura[d.persona_id] + d.altura) * ALTO_BLOQUES || 0) + OFFSET_Y : ALTURA_OCULTAMIENTO;
           return 'translate(' + x + ',' + y + ')';
         });
 
